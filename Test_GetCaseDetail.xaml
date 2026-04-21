@@ -1,0 +1,116 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Test_GetCaseDetail" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uta="clr-namespace:UiPath.Testing.Activities;assembly=UiPath.Testing.Activities" xmlns:uwahm="clr-namespace:UiPath.Web.Activities.Http.Models;assembly=UiPath.Web.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="TestName" Type="InArgument(x:String)" />
+    <x:Property Name="CaseId" Type="InArgument(x:String)" />
+    <x:Property Name="CaseNumber" Type="InArgument(x:String)" />
+    <x:Property Name="ExpectedClassification" Type="InArgument(x:String)" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>UiPath.Testing.Activities</x:String>
+      <x:String>UiPath.Web.Activities.Http.Models</x:String>
+      <x:String>UiPath.Web.Activities.Http.Models</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Linq.Expressions</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>UiPath.Web.Activities.Http</x:String>
+      <x:String>UiPath.Web.Activities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Testing.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Web.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Reflection.DispatchProxy</AssemblyReference>
+      <AssemblyReference>System.Reflection.TypeExtensions</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>System.Memory.Data</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Test_GetCaseDetail" sap:VirtualizedContainerService.HintSize="710,1715.3333333333333" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="accessToken" />
+      <Variable x:TypeArguments="x:String" Name="classification" />
+      <Variable x:TypeArguments="sd:DataTable" Name="dtCases" />
+      <Variable x:TypeArguments="uwahm:HttpResponseSummary" Name="caseDetailResponse" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Test START" sap:VirtualizedContainerService.HintSize="450,176.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;=== TEST: GetCaseDetail [&quot; + TestName + &quot;] START — CaseId=&quot; + CaseId + &quot; ExpectedClassification=&quot; + ExpectedClassification + &quot; ===&quot;]" />
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="dtCases = new System.Data.DataTable();&#xA;dtCases.Columns.Add(&quot;CaseId&quot;); dtCases.Columns.Add(&quot;CaseNumber&quot;); dtCases.Columns.Add(&quot;Status&quot;); dtCases.Columns.Add(&quot;Origin&quot;); dtCases.Columns.Add(&quot;Subject&quot;); dtCases.Columns.Add(&quot;Priority&quot;); dtCases.Columns.Add(&quot;RecordTypeId&quot;); dtCases.Columns.Add(&quot;OwnerId&quot;); dtCases.Columns.Add(&quot;OwnerName&quot;); dtCases.Columns.Add(&quot;OwnerRole&quot;); dtCases.Columns.Add(&quot;EntitlementId&quot;); dtCases.Columns.Add(&quot;CreatedDate&quot;); dtCases.Columns.Add(&quot;LastModifiedDate&quot;); dtCases.Columns.Add(&quot;SlaStartDate&quot;); dtCases.Columns.Add(&quot;IsClosed&quot;); dtCases.Columns.Add(&quot;IsDeleted&quot;); dtCases.Columns.Add(&quot;SuppliedName&quot;); dtCases.Columns.Add(&quot;SuppliedEmail&quot;); dtCases.Columns.Add(&quot;CC_GAU_Case_Type__c&quot;); dtCases.Columns.Add(&quot;CC_GAU_Case_Sub_Type__c&quot;); dtCases.Columns.Add(&quot;CC_GAU_Team__c&quot;); dtCases.Columns.Add(&quot;CC_Category__c&quot;); dtCases.Columns.Add(&quot;CC_Final_Category__c&quot;); dtCases.Columns.Add(&quot;CC_Case_Due_Date__c&quot;); dtCases.Columns.Add(&quot;CC_Case_Age_in_Days__c&quot;); dtCases.Columns.Add(&quot;CC_Determination__c&quot;); dtCases.Columns.Add(&quot;CC_Outcome__c&quot;); dtCases.Columns.Add(&quot;CC_Type__c&quot;); dtCases.Columns.Add(&quot;CC_Sub_Status__c&quot;); dtCases.Columns.Add(&quot;CC_Master_SLA_Status__c&quot;); dtCases.Columns.Add(&quot;CC_Case_Owner_s_Department__c&quot;); dtCases.Columns.Add(&quot;Description&quot;); dtCases.Columns.Add(&quot;Classification&quot;);" DisplayName="Init dtCases" sap:VirtualizedContainerService.HintSize="450,197.33333333333334" sap2010:WorkflowViewState.IdRef="InvokeCode_initDt" Language="CSharp">
+      <ui:InvokeCode.Arguments>
+        <InOutArgument x:TypeArguments="sd:DataTable" x:Key="dtCases">[dtCases]</InOutArgument>
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="Invoke GetAccessToken" sap:VirtualizedContainerService.HintSize="450,177.33333333333334" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="GetAccessToken.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_AccessToken">[accessToken]</OutArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="Invoke GetCaseDetail" sap:VirtualizedContainerService.HintSize="450,177.33333333333334" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="GetCaseDetail.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="in_AccessToken">[accessToken]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_CaseId">[CaseId]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_CaseNumber">[CaseNumber]</InArgument>
+        <InOutArgument x:TypeArguments="sd:DataTable" x:Key="io_DtCases">[dtCases]</InOutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_Classification">[classification]</OutArgument>
+        <OutArgument x:TypeArguments="uwahm:HttpResponseSummary" x:Key="out_caseDetailResponse">[caseDetailResponse]</OutArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <uta:VerifyExpression AlternativeVerificationTitle="{x:Null}" KeepScreenshots="{x:Null}" OutputMessageFormat="{x:Null}" Result="{x:Null}" ScreenshotsPath="{x:Null}" ContinueOnFailure="True" DisplayName="Verify: dtCases has 1 row" Expression="[dtCases IsNot Nothing AndAlso dtCases.Rows.Count = 1]" sap:VirtualizedContainerService.HintSize="450,124" sap2010:WorkflowViewState.IdRef="Verify_1" TakeScreenshotInCaseOfFailingAssertion="False" TakeScreenshotInCaseOfSucceedingAssertion="False" />
+    <uta:VerifyExpression AlternativeVerificationTitle="{x:Null}" KeepScreenshots="{x:Null}" OutputMessageFormat="{x:Null}" Result="{x:Null}" ScreenshotsPath="{x:Null}" ContinueOnFailure="True" DisplayName="Verify: Classification is not empty" Expression="[Not String.IsNullOrEmpty(classification)]" sap:VirtualizedContainerService.HintSize="450,124" sap2010:WorkflowViewState.IdRef="Verify_2" TakeScreenshotInCaseOfFailingAssertion="False" TakeScreenshotInCaseOfSucceedingAssertion="False" />
+    <uta:VerifyExpression AlternativeVerificationTitle="{x:Null}" KeepScreenshots="{x:Null}" OutputMessageFormat="{x:Null}" Result="{x:Null}" ScreenshotsPath="{x:Null}" ContinueOnFailure="True" DisplayName="Verify: Classification is Clinical or Non-Clinical" Expression="[classification = &quot;Clinical&quot; OrElse classification = &quot;Non-Clinical&quot;]" sap:VirtualizedContainerService.HintSize="450,124" sap2010:WorkflowViewState.IdRef="Verify_3" TakeScreenshotInCaseOfFailingAssertion="False" TakeScreenshotInCaseOfSucceedingAssertion="False" />
+    <uta:VerifyExpression AlternativeVerificationTitle="{x:Null}" KeepScreenshots="{x:Null}" OutputMessageFormat="{x:Null}" Result="{x:Null}" ScreenshotsPath="{x:Null}" ContinueOnFailure="True" DisplayName="Verify: CaseId in dtCases row matches input" Expression="[dtCases IsNot Nothing AndAlso dtCases.Rows.Count &gt; 0 AndAlso dtCases.Rows(0)(&quot;CaseId&quot;).ToString() = CaseId]" sap:VirtualizedContainerService.HintSize="450,124" sap2010:WorkflowViewState.IdRef="Verify_4" TakeScreenshotInCaseOfFailingAssertion="False" TakeScreenshotInCaseOfSucceedingAssertion="False" />
+    <uta:VerifyExpression AlternativeVerificationTitle="{x:Null}" KeepScreenshots="{x:Null}" OutputMessageFormat="{x:Null}" Result="{x:Null}" ScreenshotsPath="{x:Null}" ContinueOnFailure="True" DisplayName="Verify: Classification column in row matches output" Expression="[dtCases IsNot Nothing AndAlso dtCases.Rows.Count &gt; 0 AndAlso dtCases.Rows(0)(&quot;Classification&quot;).ToString() = classification]" sap:VirtualizedContainerService.HintSize="450,124" sap2010:WorkflowViewState.IdRef="Verify_5" TakeScreenshotInCaseOfFailingAssertion="False" TakeScreenshotInCaseOfSucceedingAssertion="False" />
+    <ui:LogMessage DisplayName="Log Actual Classification (review with SMEs)" sap:VirtualizedContainerService.HintSize="450,176.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_Classification" Level="Info" Message="[&quot;CLASSIFICATION RESULT: Case &quot; + CaseNumber + &quot; (Id: &quot; + CaseId + &quot;) classified as: &quot; + If(String.IsNullOrEmpty(classification), &quot;(empty — check HTTP response)&quot;, classification) + &quot; | Expected by test data: &quot; + ExpectedClassification]" />
+    <ui:LogMessage DisplayName="Test END" sap:VirtualizedContainerService.HintSize="450,167.33333333333334" sap2010:WorkflowViewState.IdRef="LogMessage_End" Level="Info" Message="[&quot;=== TEST: GetCaseDetail [&quot; + TestName + &quot;] END — Classification=&quot; + If(String.IsNullOrEmpty(classification), &quot;(empty)&quot;, classification) + &quot; Rows=&quot; + If(dtCases IsNot Nothing, dtCases.Rows.Count.ToString(), &quot;null&quot;) + &quot; ===&quot;]" />
+  </Sequence>
+</Activity>

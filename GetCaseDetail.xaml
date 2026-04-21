@@ -1,0 +1,127 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="GetCaseDetail" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:njl="clr-namespace:Newtonsoft.Json.Linq;assembly=Newtonsoft.Json" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uwah="clr-namespace:UiPath.Web.Activities.Http;assembly=UiPath.Web.Activities" xmlns:uwahm="clr-namespace:UiPath.Web.Activities.Http.Models;assembly=UiPath.Web.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_AccessToken" Type="InArgument(x:String)" />
+    <x:Property Name="in_CaseId" Type="InArgument(x:String)" />
+    <x:Property Name="in_CaseNumber" Type="InArgument(x:String)" />
+    <x:Property Name="io_DtCases" Type="InOutArgument(sd:DataTable)" />
+    <x:Property Name="out_Classification" Type="OutArgument(x:String)" />
+    <x:Property Name="out_caseDetailResponse" Type="OutArgument(uwahm:HttpResponseSummary)" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>Newtonsoft.Json</x:String>
+      <x:String>Newtonsoft.Json.Linq</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>UiPath.Web.Activities.Http.Models</x:String>
+      <x:String>UiPath.Web.Activities.JSON.Models</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Dynamic</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>System.Collections.Specialized</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>UiPath.Web.Activities</x:String>
+      <x:String>System.Linq.Expressions</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>UiPath.Web.Activities.Http</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Web.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>System.Collections.NonGeneric</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.EventBasedAsync</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Primitives</AssemblyReference>
+      <AssemblyReference>System.Collections.Specialized</AssemblyReference>
+      <AssemblyReference>System.Reflection.DispatchProxy</AssemblyReference>
+      <AssemblyReference>System.Reflection.TypeExtensions</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>System.Memory.Data</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>NPOI.Core</AssemblyReference>
+      <AssemblyReference>System.Linq.Async</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="GetCaseDetail" sap:VirtualizedContainerService.HintSize="710,1021.3333333333334" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Default="&quot;Non-Clinical&quot;" Name="classification" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <uwah:NetHttpRequest BasicAuthPassword="{x:Null}" BasicAuthSecurePassword="{x:Null}" BasicAuthUsername="{x:Null}" BinaryPayload="{x:Null}" ClientCertPassword="{x:Null}" ClientCertPath="{x:Null}" ClientCertSecurePassword="{x:Null}" CustomNegotiatedAuthCredentials="{x:Null}" FilePath="{x:Null}" OAuthToken="{x:Null}" OutputFileName="{x:Null}" OutputFileTargetFolder="{x:Null}" PathResource="{x:Null}" ProxyConfiguration="{x:Null}" ResourceFiles="{x:Null}" TextPayload="{x:Null}" AuthenticationType="None" ContinueOnError="True" Cookies="[New System.Collections.Generic.Dictionary(Of String, String) From {}]" DisableSslVerification="False" DisplayName="HTTP GET Case Detail" EnableCookies="True" FileOverwrite="AutoRename" FollowRedirects="True" FormData="[New System.Collections.Generic.Dictionary(Of String, String) From {}]" FormDataParts="[New List (Of FormDataPart) From { New FileFormDataPart(), New BinaryFormDataPart(), New TextFormDataPart() }]" Headers="[new System.Collections.Generic.Dictionary(Of System.String, System.String) From { { &quot;Authorization&quot;, &quot;Bearer &quot; + in_AccessToken } }]" sap:VirtualizedContainerService.HintSize="450,281.3333333333333" sap2010:WorkflowViewState.IdRef="NetHttpRequest_1" InitialDelay="500" LocalFiles="[New List (Of String) From { }]" MaxRedirects="3" MaxRetryAfterDelay="30000" Method="GET" Multiplier="2" Parameters="[new System.Collections.Generic.Dictionary(Of System.String, System.String) From {}]" PreferRetryAfterValue="True" ProxySetting="SystemDefault" RequestBodyType="None" RequestUrl="[&quot;https://bcbsrihub--testminor.sandbox.my.salesforce.com/services/data/v64.0/sobjects/Case/&quot; + in_CaseId]" Result="[out_caseDetailResponse]" RetryCount="3" RetryPolicyType="Basic" RetryStatusCodes="[New List (Of System.Net.HttpStatusCode) From { System.Net.HttpStatusCode.RequestTimeout, System.Net.HttpStatusCode.TooManyRequests, System.Net.HttpStatusCode.InternalServerError, System.Net.HttpStatusCode.BadGateway, System.Net.HttpStatusCode.ServiceUnavailable, System.Net.HttpStatusCode.GatewayTimeout }]" SaveRawRequestResponse="False" SaveResponseAsFile="False" TextPayloadContentType="application/json" TextPayloadEncoding="UTF-8" TlsProtocol="Automatic" UseJitter="True" UseOsNegotiatedAuthCredentials="True">
+      <uwah:NetHttpRequest.TimeoutInMiliseconds>
+        <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+          <Literal x:TypeArguments="s:Nullable(x:Int32)" Value="10000" />
+        </InArgument>
+      </uwah:NetHttpRequest.TimeoutInMiliseconds>
+    </uwah:NetHttpRequest>
+    <ui:DeserializeJson x:TypeArguments="njl:JObject" JsonObject="{x:Null}" JsonSample="{x:Null}" Settings="{x:Null}" DisplayName="Deserialize JSON" sap:VirtualizedContainerService.HintSize="450,176" sap2010:WorkflowViewState.IdRef="DeserializeJson`1_1" JsonString="[out_caseDetailResponse.TextContent]" />
+    <ui:LogMessage DisplayName="Log HTTP Status" sap:VirtualizedContainerService.HintSize="450,176.66666666666666" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;GetCaseDetail: Case &quot; + in_CaseNumber + &quot; (Id: &quot; + in_CaseId + &quot;) - StatusCode: &quot; + If(out_caseDetailResponse IsNot Nothing, out_caseDetailResponse.StatusCode.ToString(), &quot;(null response)&quot;)]" />
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="if (detail == null || !detail.HasValues) { classification = &quot;Non-Clinical&quot;; DataRow emptyRow = dtCases.NewRow(); emptyRow[&quot;CaseId&quot;] = caseId; emptyRow[&quot;CaseNumber&quot;] = caseNumber; emptyRow[&quot;Classification&quot;] = &quot;Non-Clinical&quot;; dtCases.Rows.Add(emptyRow); return; }&#xA;Func&lt;string, string&gt; GetField = (fieldName) =&gt; {&#xA;    if (detail[fieldName] == null || detail[fieldName].Type == Newtonsoft.Json.Linq.JTokenType.Null) return &quot;&quot;;&#xA;    return detail[fieldName].ToString();&#xA;};&#xA;string caseType = GetField(&quot;CC_GAU_Case_Type__c&quot;);&#xA;string subType  = GetField(&quot;CC_GAU_Case_Sub_Type__c&quot;);&#xA;string subject  = GetField(&quot;Subject&quot;);&#xA;string description = GetField(&quot;Description&quot;);&#xA;classification = &quot;Non-Clinical&quot;;&#xA;string combined = (caseType + subType + subject + description).ToLower();&#xA;if (combined.Contains(&quot;clinical&quot;) || combined.Contains(&quot;appeal&quot;) || combined.Contains(&quot;auth&quot;) || combined.Contains(&quot;medical necessity&quot;) || combined.Contains(&quot;grievance&quot;)) { classification = &quot;Clinical&quot;; }&#xA;DataRow row = dtCases.NewRow();&#xA;row[&quot;CaseId&quot;]                        = caseId;&#xA;row[&quot;CaseNumber&quot;]                    = caseNumber;&#xA;row[&quot;Status&quot;]                        = GetField(&quot;Status&quot;);&#xA;row[&quot;Origin&quot;]                        = GetField(&quot;Origin&quot;);&#xA;row[&quot;Subject&quot;]                       = subject;&#xA;row[&quot;Priority&quot;]                      = GetField(&quot;Priority&quot;);&#xA;row[&quot;RecordTypeId&quot;]                  = GetField(&quot;RecordTypeId&quot;);&#xA;row[&quot;OwnerId&quot;]                       = GetField(&quot;OwnerId&quot;);&#xA;row[&quot;OwnerName&quot;]                     = GetField(&quot;Case_Owner_Name__c&quot;);&#xA;row[&quot;OwnerRole&quot;]                     = GetField(&quot;Case_Owner_Role__c&quot;);&#xA;row[&quot;EntitlementId&quot;]                 = GetField(&quot;EntitlementId&quot;);&#xA;row[&quot;CreatedDate&quot;]                   = GetField(&quot;CreatedDate&quot;);&#xA;row[&quot;LastModifiedDate&quot;]              = GetField(&quot;LastModifiedDate&quot;);&#xA;row[&quot;SlaStartDate&quot;]                  = GetField(&quot;SlaStartDate&quot;);&#xA;row[&quot;IsClosed&quot;]                      = GetField(&quot;IsClosed&quot;);&#xA;row[&quot;IsDeleted&quot;]                     = GetField(&quot;IsDeleted&quot;);&#xA;row[&quot;SuppliedName&quot;]                  = GetField(&quot;SuppliedName&quot;);&#xA;row[&quot;SuppliedEmail&quot;]                 = GetField(&quot;SuppliedEmail&quot;);&#xA;row[&quot;CC_GAU_Case_Type__c&quot;]           = caseType;&#xA;row[&quot;CC_GAU_Case_Sub_Type__c&quot;]       = subType;&#xA;row[&quot;CC_GAU_Team__c&quot;]                = GetField(&quot;CC_GAU_Team__c&quot;);&#xA;row[&quot;CC_Category__c&quot;]                = GetField(&quot;CC_Category__c&quot;);&#xA;row[&quot;CC_Final_Category__c&quot;]          = GetField(&quot;CC_Final_Category__c&quot;);&#xA;row[&quot;CC_Case_Due_Date__c&quot;]           = GetField(&quot;CC_Case_Due_Date__c&quot;);&#xA;row[&quot;CC_Case_Age_in_Days__c&quot;]        = GetField(&quot;CC_Case_Age_in_Days__c&quot;);&#xA;row[&quot;CC_Determination__c&quot;]           = GetField(&quot;CC_Determination__c&quot;);&#xA;row[&quot;CC_Outcome__c&quot;]                 = GetField(&quot;CC_Outcome__c&quot;);&#xA;row[&quot;CC_Type__c&quot;]                    = GetField(&quot;CC_Type__c&quot;);&#xA;row[&quot;CC_Sub_Status__c&quot;]              = GetField(&quot;CC_Sub_Status__c&quot;);&#xA;row[&quot;CC_Master_SLA_Status__c&quot;]       = GetField(&quot;CC_Master_SLA_Status__c&quot;);&#xA;row[&quot;CC_Case_Owner_s_Department__c&quot;] = GetField(&quot;CC_Case_Owner_s_Department__c&quot;);&#xA;row[&quot;Description&quot;]                   = description;&#xA;row[&quot;Classification&quot;]                = classification;&#xA;if (dtCases.Columns.Contains(&quot;Line_Of_Business__c&quot;)) row[&quot;Line_Of_Business__c&quot;] = GetField(&quot;Line_Of_Business__c&quot;);&#xA;dtCases.Rows.Add(row);" DisplayName="Parse response, classify, add row to dtCases" sap:VirtualizedContainerService.HintSize="450,197.33333333333334" sap2010:WorkflowViewState.IdRef="InvokeCode_1" Language="CSharp">
+      <ui:InvokeCode.Arguments>
+        <InArgument x:TypeArguments="njl:JObject" x:Key="detail">[TryCast(Newtonsoft.Json.JsonConvert.DeserializeObject(If(out_caseDetailResponse IsNot Nothing AndAlso out_caseDetailResponse.TextContent IsNot Nothing, out_caseDetailResponse.TextContent, "{}")), Newtonsoft.Json.Linq.JObject)]</InArgument>
+        <InArgument x:TypeArguments="sd:DataTable" x:Key="dtCases">[io_DtCases]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="caseId">[in_CaseId]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="caseNumber">[in_CaseNumber]</InArgument>
+        <InOutArgument x:TypeArguments="x:String" x:Key="classification">[classification]</InOutArgument>
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
+    <Assign DisplayName="Set out_Classification" sap:VirtualizedContainerService.HintSize="450,167.33333333333334" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_Classification]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[classification]</InArgument>
+      </Assign.Value>
+    </Assign>
+  </Sequence>
+</Activity>

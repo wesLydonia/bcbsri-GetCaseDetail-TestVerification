@@ -1,0 +1,41 @@
+{
+  "$schema": "https://cloud.uipath.com/draft/2024-12/entry-point",
+  "entryPoints": [
+    {
+      "filePath": "Main.xaml",
+      "uniqueId": "e2f3a4b5-c6d7-4e8f-9012-34567890abcd",
+      "type": "process",
+      "input": {
+        "type": "object",
+        "properties": {
+          "in_AttachmentName": {
+            "type": "string",
+            "x-default-expression": "\"faxreceive.2026-04-17-16-24-27_5B8.pdf\"",
+            "default": "faxreceive.2026-04-17-16-24-27_5B8.pdf"
+          }
+        },
+        "required": []
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "out_CaseId": {
+            "type": "string"
+          },
+          "out_CaseNumber": {
+            "type": "string"
+          },
+          "out_CaseJson": {
+            "type": "string"
+          },
+          "out_Found": {
+            "type": "boolean"
+          },
+          "out_MatchMethod": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" this:Main.in_AttachmentName="faxreceive.2026-04-17-16-24-27_5B8.pdf" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uwah="clr-namespace:UiPath.Web.Activities.Http;assembly=UiPath.Web.Activities" xmlns:uwahm="clr-namespace:UiPath.Web.Activities.Http.Models;assembly=UiPath.Web.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_AttachmentName" Type="InArgument(x:String)" />
+    <x:Property Name="out_CaseId" Type="OutArgument(x:String)" />
+    <x:Property Name="out_CaseNumber" Type="OutArgument(x:String)" />
+    <x:Property Name="out_CaseJson" Type="OutArgument(x:String)" />
+    <x:Property Name="out_Found" Type="OutArgument(x:Boolean)" />
+    <x:Property Name="out_MatchMethod" Type="OutArgument(x:String)" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>Newtonsoft.Json</x:String>
+      <x:String>Newtonsoft.Json.Linq</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>UiPath.Web.Activities.Http</x:String>
+      <x:String>UiPath.Web.Activities.Http.Models</x:String>
+      <x:String>System.Linq.Expressions</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Web.Activities</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Main" sap:VirtualizedContainerService.HintSize="1151,3114" sap2010:WorkflowViewState.IdRef="Sequence_Main">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="accessToken" />
+      <Variable x:TypeArguments="x:String" Name="dataApiUrl" />
+      <Variable x:TypeArguments="x:String" Name="caseId" />
+      <Variable x:TypeArguments="x:String" Name="matchMethod" />
+      <Variable x:TypeArguments="x:Boolean" Name="found" />
+      <Variable x:TypeArguments="uwahm:HttpResponseSummary" Name="caseResponse" />
+      <Variable x:TypeArguments="x:String" Default="&quot;&quot;" Name="caseJsonText" />
+      <Variable x:TypeArguments="x:String" Default="&quot;&quot;" Name="caseNumberLocal" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Log START" sap:VirtualizedContainerService.HintSize="452,175" sap2010:WorkflowViewState.IdRef="LogMessage_MainStart" Level="Info" Message="[&quot;GetCaseDetailByAttachment START — AttachmentName=&quot; + If(in_AttachmentName, &quot;(null)&quot;)]" />
+    <Assign DisplayName="Init dataApiUrl" sap:VirtualizedContainerService.HintSize="452,175" sap2010:WorkflowViewState.IdRef="Assign_InitDataApiUrl">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[dataApiUrl]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">["https://bcbsrihub.my.salesforce.com/services/data/v64.0"]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <If Condition="[String.IsNullOrWhiteSpace(in_AttachmentName)]" DisplayName="Validate input" sap:VirtualizedContainerService.HintSize="452,342" sap2010:WorkflowViewState.IdRef="If_Validate">
+      <If.Then>
+        <Throw DisplayName="Throw on empty input" Exception="[New BusinessRuleException(&quot;in_AttachmentName is required.&quot;)]" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="Throw_1" />
+      </If.Then>
+    </If>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="Get SF access token" sap:VirtualizedContainerService.HintSize="452,177" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_Auth" UnSafe="False" WorkflowFileName="GetAccessToken.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_AccessToken">[accessToken]</OutArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="Find case by attachment name" sap:VirtualizedContainerService.HintSize="452,177" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_Find" UnSafe="False" WorkflowFileName="FindCaseByAttachment.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="in_AccessToken">[accessToken]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_DataApiUrl">[dataApiUrl]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_AttachmentName">[in_AttachmentName]</InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_CaseId">[caseId]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_MatchMethod">[matchMethod]</OutArgument>
+        <OutArgument x:TypeArguments="x:Boolean" x:Key="out_Found">[found]</OutArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <If Condition="[found]" DisplayName="If case found, fetch full detail" sap:VirtualizedContainerService.HintSize="452,1004" sap2010:WorkflowViewState.IdRef="If_Found">
+      <If.Then>
+        <Sequence DisplayName="Fetch Case detail" sap:VirtualizedContainerService.HintSize="450,700" sap2010:WorkflowViewState.IdRef="Sequence_Fetch">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <uwah:NetHttpRequest BasicAuthPassword="{x:Null}" BasicAuthSecurePassword="{x:Null}" BasicAuthUsername="{x:Null}" BinaryPayload="{x:Null}" ClientCertPassword="{x:Null}" ClientCertPath="{x:Null}" ClientCertSecurePassword="{x:Null}" CustomNegotiatedAuthCredentials="{x:Null}" FilePath="{x:Null}" OAuthToken="{x:Null}" OutputFileName="{x:Null}" OutputFileTargetFolder="{x:Null}" PathResource="{x:Null}" ProxyConfiguration="{x:Null}" ResourceFiles="{x:Null}" TextPayload="{x:Null}" AuthenticationType="None" ContinueOnError="True" Cookies="[New System.Collections.Generic.Dictionary(Of String, String) From {}]" DisableSslVerification="False" DisplayName="HTTP GET Case detail" EnableCookies="True" FileOverwrite="AutoRename" FollowRedirects="True" FormData="[New System.Collections.Generic.Dictionary(Of String, String) From {}]" FormDataParts="[New List (Of FormDataPart) From { New FileFormDataPart(), New BinaryFormDataPart(), New TextFormDataPart() }]" Headers="[new System.Collections.Generic.Dictionary(Of System.String, System.String) From { { &quot;Authorization&quot;, &quot;Bearer &quot; + accessToken } }]" sap:VirtualizedContainerService.HintSize="416,277" sap2010:WorkflowViewState.IdRef="NetHttpRequest_Case" InitialDelay="500" LocalFiles="[New List (Of String) From { }]" MaxRedirects="3" MaxRetryAfterDelay="30000" Method="GET" Multiplier="2" Parameters="[New System.Collections.Generic.Dictionary(Of System.String, System.String) From {}]" PreferRetryAfterValue="True" ProxySetting="SystemDefault" RequestBodyType="None" RequestUrl="[dataApiUrl + &quot;/sobjects/Case/&quot; + caseId]" Result="[caseResponse]" RetryCount="2" RetryPolicyType="Basic" RetryStatusCodes="[New List (Of System.Net.HttpStatusCode) From { System.Net.HttpStatusCode.RequestTimeout, System.Net.HttpStatusCode.TooManyRequests, System.Net.HttpStatusCode.InternalServerError, System.Net.HttpStatusCode.BadGateway, System.Net.HttpStatusCode.ServiceUnavailable, System.Net.HttpStatusCode.GatewayTimeout }]" SaveRawRequestResponse="False" SaveResponseAsFile="False" TextPayloadContentType="application/json" TextPayloadEncoding="UTF-8" TlsProtocol="Automatic" UseJitter="True" UseOsNegotiatedAuthCredentials="True">
+            <uwah:NetHttpRequest.TimeoutInMiliseconds>
+              <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                <Literal x:TypeArguments="s:Nullable(x:Int32)" Value="20000" />
+              </InArgument>
+            </uwah:NetHttpRequest.TimeoutInMiliseconds>
+          </uwah:NetHttpRequest>
+          <ui:InvokeCode ContinueOnError="{x:Null}" Code="string body = (caseBody == null) ? &quot;&quot; : caseBody;&#xA;outJson = body;&#xA;outCaseNum = &quot;&quot;;&#xA;if (string.IsNullOrEmpty(body)) return;&#xA;try {&#xA;    var token = Newtonsoft.Json.Linq.JToken.Parse(body);&#xA;    if (token is Newtonsoft.Json.Linq.JObject) {&#xA;        var obj = (Newtonsoft.Json.Linq.JObject)token;&#xA;        if (obj[&quot;CaseNumber&quot;] != null &amp;&amp; obj[&quot;CaseNumber&quot;].Type != Newtonsoft.Json.Linq.JTokenType.Null) {&#xA;            outCaseNum = obj[&quot;CaseNumber&quot;].ToString();&#xA;        }&#xA;        outJson = obj.ToString(Newtonsoft.Json.Formatting.Indented);&#xA;    }&#xA;} catch { }" DisplayName="Parse Case JSON" sap:VirtualizedContainerService.HintSize="416,197" sap2010:WorkflowViewState.IdRef="InvokeCode_ParseCase" Language="CSharp">
+            <ui:InvokeCode.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="caseBody">[If(caseResponse IsNot Nothing, caseResponse.TextContent, "")]</InArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="outJson">[caseJsonText]</OutArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="outCaseNum">[caseNumberLocal]</OutArgument>
+            </ui:InvokeCode.Arguments>
+          </ui:InvokeCode>
+          <ui:LogMessage DisplayName="Log case fetch result" sap:VirtualizedContainerService.HintSize="416,166" sap2010:WorkflowViewState.IdRef="LogMessage_CaseFetch" Level="Info" Message="[&quot;Case fetched: CaseId=&quot; + caseId + &quot; CaseNumber=&quot; + caseNumberLocal + &quot; HttpStatus=&quot; + If(caseResponse IsNot Nothing, caseResponse.StatusCode.ToString(), &quot;(null)&quot;)]" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <ui:LogMessage DisplayName="Log not found" sap:VirtualizedContainerService.HintSize="450,143" sap2010:WorkflowViewState.IdRef="LogMessage_NotFound" Level="Warn" Message="[&quot;No case found for attachment '&quot; + in_AttachmentName + &quot;'. MatchMethod=&quot; + matchMethod]" />
+      </If.Else>
+    </If>
+    <Assign DisplayName="Assign out_CaseId" sap:VirtualizedContainerService.HintSize="452,175" sap2010:WorkflowViewState.IdRef="Assign_OutCaseId">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_CaseId]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[caseId]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign out_CaseNumber" sap:VirtualizedContainerService.HintSize="452,175" sap2010:WorkflowViewState.IdRef="Assign_OutCaseNumber">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_CaseNumber]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[caseNumberLocal]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign out_CaseJson" sap:VirtualizedContainerService.HintSize="452,175" sap2010:WorkflowViewState.IdRef="Assign_OutCaseJson">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_CaseJson]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[caseJsonText]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign out_Found" sap:VirtualizedContainerService.HintSize="452,175" sap2010:WorkflowViewState.IdRef="Assign_OutFound">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Boolean">[out_Found]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Boolean">[found]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign out_MatchMethod" sap:VirtualizedContainerService.HintSize="452,175" sap2010:WorkflowViewState.IdRef="Assign_OutMatchMethod">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_MatchMethod]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[matchMethod]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log END" sap:VirtualizedContainerService.HintSize="452,166" sap2010:WorkflowViewState.IdRef="LogMessage_MainEnd" Level="Info" Message="[&quot;GetCaseDetailByAttachment END — Found=&quot; + found.ToString() + &quot; CaseId=&quot; + If(caseId, &quot;&quot;) + &quot; CaseNumber=&quot; + If(caseNumberLocal, &quot;&quot;) + &quot; MatchMethod=&quot; + If(matchMethod, &quot;&quot;)]" />
+  </Sequence>
+</Activity>

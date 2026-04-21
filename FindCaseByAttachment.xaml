@@ -1,0 +1,213 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="FindCaseByAttachment" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uwah="clr-namespace:UiPath.Web.Activities.Http;assembly=UiPath.Web.Activities" xmlns:uwahm="clr-namespace:UiPath.Web.Activities.Http.Models;assembly=UiPath.Web.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_AccessToken" Type="InArgument(x:String)" />
+    <x:Property Name="in_DataApiUrl" Type="InArgument(x:String)" />
+    <x:Property Name="in_AttachmentName" Type="InArgument(x:String)" />
+    <x:Property Name="out_CaseId" Type="OutArgument(x:String)" />
+    <x:Property Name="out_MatchMethod" Type="OutArgument(x:String)" />
+    <x:Property Name="out_Found" Type="OutArgument(x:Boolean)" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>Newtonsoft.Json</x:String>
+      <x:String>Newtonsoft.Json.Linq</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>UiPath.Web.Activities.Http</x:String>
+      <x:String>UiPath.Web.Activities.Http.Models</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Web.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>System.Collections.NonGeneric</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="FindCaseByAttachment" sap:VirtualizedContainerService.HintSize="1092.4,2088" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="uwahm:HttpResponseSummary" Name="attResponse" />
+      <Variable x:TypeArguments="uwahm:HttpResponseSummary" Name="emResponse" />
+      <Variable x:TypeArguments="uwahm:HttpResponseSummary" Name="cvResponse" />
+      <Variable x:TypeArguments="uwahm:HttpResponseSummary" Name="cdlResponse" />
+      <Variable x:TypeArguments="x:String" Name="apiBase" />
+      <Variable x:TypeArguments="x:String" Name="queryEndpoint" />
+      <Variable x:TypeArguments="x:String" Name="sanitizedName" />
+      <Variable x:TypeArguments="x:String" Name="attSoql" />
+      <Variable x:TypeArguments="x:String" Name="cvSoql" />
+      <Variable x:TypeArguments="x:String" Name="emSoql" />
+      <Variable x:TypeArguments="x:String" Name="cdlSoql" />
+      <Variable x:TypeArguments="x:String" Name="candidateCaseId" />
+      <Variable x:TypeArguments="x:String" Name="emailMessageIds" />
+      <Variable x:TypeArguments="x:String" Name="contentDocumentIds" />
+      <Variable x:TypeArguments="x:String" Name="matchMethodLocal" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Log START" sap:VirtualizedContainerService.HintSize="449.6,174.4" sap2010:WorkflowViewState.IdRef="LogMessage_Start" Level="Info" Message="[&quot;FindCaseByAttachment: searching for attachment '&quot; + If(in_AttachmentName, &quot;(null)&quot;) + &quot;'&quot;]" />
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="string baseApi = string.IsNullOrWhiteSpace(inDataApiUrl) ? &quot;https://bcbsrihub--testminor.sandbox.my.salesforce.com/services/data/v64.0&quot; : inDataApiUrl.Trim();&#xA;baseApi = baseApi.Trim('&quot;', '\'', ' ');&#xA;if (baseApi.EndsWith(&quot;/&quot;)) baseApi = baseApi.TrimEnd('/');&#xA;outBase = baseApi;&#xA;outEndpoint = baseApi + &quot;/query/&quot;;&#xA;outSan = (inName ?? &quot;&quot;).Replace(&quot;\&quot;&quot;, &quot;&quot;).Replace(&quot;'&quot;, &quot;\\'&quot;);&#xA;outAttSoql = &quot;SELECT Id, Name, ParentId, CreatedDate FROM Attachment WHERE Name = '&quot; + outSan + &quot;' ORDER BY CreatedDate DESC LIMIT 25&quot;;&#xA;outCvSoql = &quot;SELECT Id, Title, PathOnClient, ContentDocumentId, FirstPublishLocationId FROM ContentVersion WHERE (Title = '&quot; + outSan + &quot;' OR PathOnClient = '&quot; + outSan + &quot;') AND IsLatest = true LIMIT 25&quot;;&#xA;outMatchMethod = &quot;NotFound&quot;;&#xA;outCaseId = &quot;&quot;;&#xA;outEmIds = &quot;&quot;;&#xA;outCdIds = &quot;&quot;;" DisplayName="Build SOQL + endpoints" sap:VirtualizedContainerService.HintSize="449.6,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_Build" Language="CSharp">
+      <ui:InvokeCode.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="inName">[in_AttachmentName]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="inDataApiUrl">[in_DataApiUrl]</InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outBase">[apiBase]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outEndpoint">[queryEndpoint]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outSan">[sanitizedName]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outAttSoql">[attSoql]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outCvSoql">[cvSoql]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outMatchMethod">[matchMethodLocal]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outCaseId">[candidateCaseId]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outEmIds">[emailMessageIds]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outCdIds">[contentDocumentIds]</OutArgument>
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
+    <ui:LogMessage DisplayName="Log query endpoint" sap:VirtualizedContainerService.HintSize="449.6,174.4" sap2010:WorkflowViewState.IdRef="LogMessage_Endpoint" Level="Info" Message="[&quot;Query endpoint: &quot; + queryEndpoint]" />
+    <uwah:NetHttpRequest BasicAuthPassword="{x:Null}" BasicAuthSecurePassword="{x:Null}" BasicAuthUsername="{x:Null}" BinaryPayload="{x:Null}" ClientCertPassword="{x:Null}" ClientCertPath="{x:Null}" ClientCertSecurePassword="{x:Null}" CustomNegotiatedAuthCredentials="{x:Null}" FilePath="{x:Null}" OAuthToken="{x:Null}" OutputFileName="{x:Null}" OutputFileTargetFolder="{x:Null}" PathResource="{x:Null}" ProxyConfiguration="{x:Null}" ResourceFiles="{x:Null}" TextPayload="{x:Null}" AuthenticationType="None" ContinueOnError="True" Cookies="[New System.Collections.Generic.Dictionary(Of String, String) From {}]" DisableSslVerification="False" DisplayName="HTTP GET Attachment by Name" EnableCookies="True" FileOverwrite="AutoRename" FollowRedirects="True" FormData="[New System.Collections.Generic.Dictionary(Of String, String) From {}]" FormDataParts="[New List (Of FormDataPart) From { New FileFormDataPart(), New BinaryFormDataPart(), New TextFormDataPart() }]" Headers="[new System.Collections.Generic.Dictionary(Of System.String, System.String) From { { &quot;Authorization&quot;, &quot;Bearer &quot; + in_AccessToken } }]" sap:VirtualizedContainerService.HintSize="449.6,276.8" sap2010:WorkflowViewState.IdRef="NetHttpRequest_Att" InitialDelay="500" LocalFiles="[New List (Of String) From { }]" MaxRedirects="3" MaxRetryAfterDelay="30000" Method="GET" Multiplier="2" Parameters="[new System.Collections.Generic.Dictionary(Of System.String, System.String) From { { &quot;q&quot;, attSoql } }]" PreferRetryAfterValue="True" ProxySetting="SystemDefault" RequestBodyType="None" RequestUrl="[queryEndpoint]" Result="[attResponse]" RetryCount="2" RetryPolicyType="Basic" RetryStatusCodes="[New List (Of System.Net.HttpStatusCode) From { System.Net.HttpStatusCode.RequestTimeout, System.Net.HttpStatusCode.TooManyRequests, System.Net.HttpStatusCode.InternalServerError, System.Net.HttpStatusCode.BadGateway, System.Net.HttpStatusCode.ServiceUnavailable, System.Net.HttpStatusCode.GatewayTimeout }]" SaveRawRequestResponse="False" SaveResponseAsFile="False" TextPayloadContentType="application/json" TextPayloadEncoding="UTF-8" TlsProtocol="Automatic" UseJitter="True" UseOsNegotiatedAuthCredentials="True">
+      <uwah:NetHttpRequest.TimeoutInMiliseconds>
+        <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+          <Literal x:TypeArguments="s:Nullable(x:Int32)" Value="30000" />
+        </InArgument>
+      </uwah:NetHttpRequest.TimeoutInMiliseconds>
+    </uwah:NetHttpRequest>
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="string body = (attBody == null) ? &quot;&quot; : attBody;&#xA;outEmIds = &quot;&quot;;&#xA;if (string.IsNullOrEmpty(body)) return;&#xA;Newtonsoft.Json.Linq.JToken token;&#xA;try { token = Newtonsoft.Json.Linq.JToken.Parse(body); } catch { return; }&#xA;if (token is Newtonsoft.Json.Linq.JArray) return;&#xA;var obj = (Newtonsoft.Json.Linq.JObject)token;&#xA;var records = obj[&quot;records&quot;] as Newtonsoft.Json.Linq.JArray;&#xA;if (records == null || records.Count == 0) return;&#xA;var emList = new System.Collections.Generic.List&lt;string&gt;();&#xA;foreach (var r in records) {&#xA;    string pid = (r[&quot;ParentId&quot;] == null || r[&quot;ParentId&quot;].Type == Newtonsoft.Json.Linq.JTokenType.Null) ? &quot;&quot; : r[&quot;ParentId&quot;].ToString();&#xA;    if (string.IsNullOrEmpty(pid)) continue;&#xA;    if (pid.StartsWith(&quot;500&quot;)) { outCaseId = pid; outMethod = &quot;Attachment.ParentId&quot;; return; }&#xA;    if (pid.StartsWith(&quot;02s&quot;) &amp;&amp; !emList.Contains(pid)) emList.Add(pid);&#xA;}&#xA;outEmIds = string.Join(&quot;,&quot;, emList);" DisplayName="Parse Attachment response" sap:VirtualizedContainerService.HintSize="449.6,196.8" sap2010:WorkflowViewState.IdRef="InvokeCode_ParseAtt" Language="CSharp">
+      <ui:InvokeCode.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="attBody">[If(attResponse IsNot Nothing, attResponse.TextContent, "")]</InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outCaseId">[candidateCaseId]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outEmIds">[emailMessageIds]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outMethod">[matchMethodLocal]</OutArgument>
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
+    <If Condition="[String.IsNullOrEmpty(candidateCaseId) AndAlso Not String.IsNullOrEmpty(emailMessageIds)]" DisplayName="If need EmailMessage resolution" sap:VirtualizedContainerService.HintSize="449.6,178.4" sap2010:WorkflowViewState.IdRef="If_EmNeeded">
+      <If.Then>
+        <Sequence DisplayName="EmailMessage lookup" sap2010:WorkflowViewState.IdRef="Sequence_Em">
+          <ui:InvokeCode ContinueOnError="{x:Null}" Code="var ids = emIds.Split(new[]{','}, System.StringSplitOptions.RemoveEmptyEntries);&#xA;var quoted = string.Join(&quot;,&quot;, ids.Select(i =&gt; &quot;'&quot; + i + &quot;'&quot;));&#xA;outSoql = &quot;SELECT Id, ParentId FROM EmailMessage WHERE Id IN (&quot; + quoted + &quot;) LIMIT 200&quot;;" DisplayName="Build EmailMessage SOQL" sap2010:WorkflowViewState.IdRef="InvokeCode_EmSoql" Language="CSharp">
+            <ui:InvokeCode.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="emIds">[emailMessageIds]</InArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="outSoql">[emSoql]</OutArgument>
+            </ui:InvokeCode.Arguments>
+          </ui:InvokeCode>
+          <uwah:NetHttpRequest BasicAuthPassword="{x:Null}" BasicAuthSecurePassword="{x:Null}" BasicAuthUsername="{x:Null}" BinaryPayload="{x:Null}" ClientCertPassword="{x:Null}" ClientCertPath="{x:Null}" ClientCertSecurePassword="{x:Null}" CustomNegotiatedAuthCredentials="{x:Null}" FilePath="{x:Null}" OAuthToken="{x:Null}" OutputFileName="{x:Null}" OutputFileTargetFolder="{x:Null}" PathResource="{x:Null}" ProxyConfiguration="{x:Null}" ResourceFiles="{x:Null}" TextPayload="{x:Null}" AuthenticationType="None" ContinueOnError="True" Cookies="[New System.Collections.Generic.Dictionary(Of String, String) From {}]" DisableSslVerification="False" DisplayName="HTTP GET EmailMessage" EnableCookies="True" FileOverwrite="AutoRename" FollowRedirects="True" FormData="[New System.Collections.Generic.Dictionary(Of String, String) From {}]" FormDataParts="[New List (Of FormDataPart) From { New FileFormDataPart(), New BinaryFormDataPart(), New TextFormDataPart() }]" Headers="[new System.Collections.Generic.Dictionary(Of System.String, System.String) From { { &quot;Authorization&quot;, &quot;Bearer &quot; + in_AccessToken } }]" sap2010:WorkflowViewState.IdRef="NetHttpRequest_Em" InitialDelay="500" LocalFiles="[New List (Of String) From { }]" MaxRedirects="3" MaxRetryAfterDelay="30000" Method="GET" Multiplier="2" Parameters="[new System.Collections.Generic.Dictionary(Of System.String, System.String) From { { &quot;q&quot;, emSoql } }]" PreferRetryAfterValue="True" ProxySetting="SystemDefault" RequestBodyType="None" RequestUrl="[queryEndpoint]" Result="[emResponse]" RetryCount="2" RetryPolicyType="Basic" RetryStatusCodes="[New List (Of System.Net.HttpStatusCode) From { System.Net.HttpStatusCode.RequestTimeout, System.Net.HttpStatusCode.TooManyRequests, System.Net.HttpStatusCode.InternalServerError, System.Net.HttpStatusCode.BadGateway, System.Net.HttpStatusCode.ServiceUnavailable, System.Net.HttpStatusCode.GatewayTimeout }]" SaveRawRequestResponse="False" SaveResponseAsFile="False" TextPayloadContentType="application/json" TextPayloadEncoding="UTF-8" TlsProtocol="Automatic" UseJitter="True" UseOsNegotiatedAuthCredentials="True">
+            <uwah:NetHttpRequest.TimeoutInMiliseconds>
+              <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                <Literal x:TypeArguments="s:Nullable(x:Int32)" Value="30000" />
+              </InArgument>
+            </uwah:NetHttpRequest.TimeoutInMiliseconds>
+          </uwah:NetHttpRequest>
+          <ui:InvokeCode ContinueOnError="{x:Null}" Code="string body = (emBody == null) ? &quot;&quot; : emBody;&#xA;if (string.IsNullOrEmpty(body)) return;&#xA;Newtonsoft.Json.Linq.JToken token;&#xA;try { token = Newtonsoft.Json.Linq.JToken.Parse(body); } catch { return; }&#xA;if (token is Newtonsoft.Json.Linq.JArray) return;&#xA;var obj = (Newtonsoft.Json.Linq.JObject)token;&#xA;var records = obj[&quot;records&quot;] as Newtonsoft.Json.Linq.JArray;&#xA;if (records == null || records.Count == 0) return;&#xA;foreach (var r in records) {&#xA;    string pid = (r[&quot;ParentId&quot;] == null || r[&quot;ParentId&quot;].Type == Newtonsoft.Json.Linq.JTokenType.Null) ? &quot;&quot; : r[&quot;ParentId&quot;].ToString();&#xA;    if (!string.IsNullOrEmpty(pid) &amp;&amp; pid.StartsWith(&quot;500&quot;)) {&#xA;        outCaseId = pid;&#xA;        outMethod = &quot;Attachment.EmailMessage.ParentId&quot;;&#xA;        return;&#xA;    }&#xA;}" DisplayName="Parse EmailMessage response" sap2010:WorkflowViewState.IdRef="InvokeCode_ParseEm" Language="CSharp">
+            <ui:InvokeCode.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="emBody">[If(emResponse IsNot Nothing, emResponse.TextContent, "")]</InArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="outCaseId">[candidateCaseId]</OutArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="outMethod">[matchMethodLocal]</OutArgument>
+            </ui:InvokeCode.Arguments>
+          </ui:InvokeCode>
+        </Sequence>
+      </If.Then>
+    </If>
+    <If Condition="[String.IsNullOrEmpty(candidateCaseId)]" DisplayName="If still not found, try ContentVersion" sap:VirtualizedContainerService.HintSize="449.6,178.4" sap2010:WorkflowViewState.IdRef="If_CvNeeded">
+      <If.Then>
+        <Sequence DisplayName="ContentVersion fallback" sap2010:WorkflowViewState.IdRef="Sequence_Cv">
+          <uwah:NetHttpRequest BasicAuthPassword="{x:Null}" BasicAuthSecurePassword="{x:Null}" BasicAuthUsername="{x:Null}" BinaryPayload="{x:Null}" ClientCertPassword="{x:Null}" ClientCertPath="{x:Null}" ClientCertSecurePassword="{x:Null}" CustomNegotiatedAuthCredentials="{x:Null}" FilePath="{x:Null}" OAuthToken="{x:Null}" OutputFileName="{x:Null}" OutputFileTargetFolder="{x:Null}" PathResource="{x:Null}" ProxyConfiguration="{x:Null}" ResourceFiles="{x:Null}" TextPayload="{x:Null}" AuthenticationType="None" ContinueOnError="True" Cookies="[New System.Collections.Generic.Dictionary(Of String, String) From {}]" DisableSslVerification="False" DisplayName="HTTP GET ContentVersion" EnableCookies="True" FileOverwrite="AutoRename" FollowRedirects="True" FormData="[New System.Collections.Generic.Dictionary(Of String, String) From {}]" FormDataParts="[New List (Of FormDataPart) From { New FileFormDataPart(), New BinaryFormDataPart(), New TextFormDataPart() }]" Headers="[new System.Collections.Generic.Dictionary(Of System.String, System.String) From { { &quot;Authorization&quot;, &quot;Bearer &quot; + in_AccessToken } }]" sap2010:WorkflowViewState.IdRef="NetHttpRequest_Cv" InitialDelay="500" LocalFiles="[New List (Of String) From { }]" MaxRedirects="3" MaxRetryAfterDelay="30000" Method="GET" Multiplier="2" Parameters="[new System.Collections.Generic.Dictionary(Of System.String, System.String) From { { &quot;q&quot;, cvSoql } }]" PreferRetryAfterValue="True" ProxySetting="SystemDefault" RequestBodyType="None" RequestUrl="[queryEndpoint]" Result="[cvResponse]" RetryCount="2" RetryPolicyType="Basic" RetryStatusCodes="[New List (Of System.Net.HttpStatusCode) From { System.Net.HttpStatusCode.RequestTimeout, System.Net.HttpStatusCode.TooManyRequests, System.Net.HttpStatusCode.InternalServerError, System.Net.HttpStatusCode.BadGateway, System.Net.HttpStatusCode.ServiceUnavailable, System.Net.HttpStatusCode.GatewayTimeout }]" SaveRawRequestResponse="False" SaveResponseAsFile="False" TextPayloadContentType="application/json" TextPayloadEncoding="UTF-8" TlsProtocol="Automatic" UseJitter="True" UseOsNegotiatedAuthCredentials="True">
+            <uwah:NetHttpRequest.TimeoutInMiliseconds>
+              <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                <Literal x:TypeArguments="s:Nullable(x:Int32)" Value="30000" />
+              </InArgument>
+            </uwah:NetHttpRequest.TimeoutInMiliseconds>
+          </uwah:NetHttpRequest>
+          <ui:InvokeCode ContinueOnError="{x:Null}" Code="string body = (cvBody == null) ? &quot;&quot; : cvBody;&#xA;outCdIds = &quot;&quot;;&#xA;if (string.IsNullOrEmpty(body)) return;&#xA;Newtonsoft.Json.Linq.JToken token;&#xA;try { token = Newtonsoft.Json.Linq.JToken.Parse(body); } catch { return; }&#xA;if (token is Newtonsoft.Json.Linq.JArray) return;&#xA;var obj = (Newtonsoft.Json.Linq.JObject)token;&#xA;var records = obj[&quot;records&quot;] as Newtonsoft.Json.Linq.JArray;&#xA;if (records == null || records.Count == 0) return;&#xA;var cdList = new System.Collections.Generic.List&lt;string&gt;();&#xA;foreach (var r in records) {&#xA;    string fpl = (r[&quot;FirstPublishLocationId&quot;] == null || r[&quot;FirstPublishLocationId&quot;].Type == Newtonsoft.Json.Linq.JTokenType.Null) ? &quot;&quot; : r[&quot;FirstPublishLocationId&quot;].ToString();&#xA;    if (!string.IsNullOrEmpty(fpl) &amp;&amp; fpl.StartsWith(&quot;500&quot;)) { outCaseId = fpl; outMethod = &quot;ContentVersion.FirstPublishLocationId&quot;; return; }&#xA;    string cdid = (r[&quot;ContentDocumentId&quot;] == null || r[&quot;ContentDocumentId&quot;].Type == Newtonsoft.Json.Linq.JTokenType.Null) ? &quot;&quot; : r[&quot;ContentDocumentId&quot;].ToString();&#xA;    if (!string.IsNullOrEmpty(cdid) &amp;&amp; !cdList.Contains(cdid)) cdList.Add(cdid);&#xA;}&#xA;outCdIds = string.Join(&quot;,&quot;, cdList);" DisplayName="Parse ContentVersion response" sap2010:WorkflowViewState.IdRef="InvokeCode_ParseCv" Language="CSharp">
+            <ui:InvokeCode.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="cvBody">[If(cvResponse IsNot Nothing, cvResponse.TextContent, "")]</InArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="outCaseId">[candidateCaseId]</OutArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="outCdIds">[contentDocumentIds]</OutArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="outMethod">[matchMethodLocal]</OutArgument>
+            </ui:InvokeCode.Arguments>
+          </ui:InvokeCode>
+          <If Condition="[String.IsNullOrEmpty(candidateCaseId) AndAlso Not String.IsNullOrEmpty(contentDocumentIds)]" DisplayName="If need ContentDocumentLink resolution" sap2010:WorkflowViewState.IdRef="If_CdlNeeded">
+            <If.Then>
+              <Sequence DisplayName="ContentDocumentLink lookup" sap2010:WorkflowViewState.IdRef="Sequence_Cdl">
+                <ui:InvokeCode ContinueOnError="{x:Null}" Code="var ids = cdIds.Split(new[]{','}, System.StringSplitOptions.RemoveEmptyEntries);&#xA;var quoted = string.Join(&quot;,&quot;, ids.Select(i =&gt; &quot;'&quot; + i + &quot;'&quot;));&#xA;outSoql = &quot;SELECT LinkedEntityId, ContentDocumentId FROM ContentDocumentLink WHERE ContentDocumentId IN (&quot; + quoted + &quot;) LIMIT 200&quot;;" DisplayName="Build CDL SOQL" sap2010:WorkflowViewState.IdRef="InvokeCode_CdlSoql" Language="CSharp">
+                  <ui:InvokeCode.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="cdIds">[contentDocumentIds]</InArgument>
+                    <OutArgument x:TypeArguments="x:String" x:Key="outSoql">[cdlSoql]</OutArgument>
+                  </ui:InvokeCode.Arguments>
+                </ui:InvokeCode>
+                <uwah:NetHttpRequest BasicAuthPassword="{x:Null}" BasicAuthSecurePassword="{x:Null}" BasicAuthUsername="{x:Null}" BinaryPayload="{x:Null}" ClientCertPassword="{x:Null}" ClientCertPath="{x:Null}" ClientCertSecurePassword="{x:Null}" CustomNegotiatedAuthCredentials="{x:Null}" FilePath="{x:Null}" OAuthToken="{x:Null}" OutputFileName="{x:Null}" OutputFileTargetFolder="{x:Null}" PathResource="{x:Null}" ProxyConfiguration="{x:Null}" ResourceFiles="{x:Null}" TextPayload="{x:Null}" AuthenticationType="None" ContinueOnError="True" Cookies="[New System.Collections.Generic.Dictionary(Of String, String) From {}]" DisableSslVerification="False" DisplayName="HTTP GET ContentDocumentLink" EnableCookies="True" FileOverwrite="AutoRename" FollowRedirects="True" FormData="[New System.Collections.Generic.Dictionary(Of String, String) From {}]" FormDataParts="[New List (Of FormDataPart) From { New FileFormDataPart(), New BinaryFormDataPart(), New TextFormDataPart() }]" Headers="[new System.Collections.Generic.Dictionary(Of System.String, System.String) From { { &quot;Authorization&quot;, &quot;Bearer &quot; + in_AccessToken } }]" sap2010:WorkflowViewState.IdRef="NetHttpRequest_Cdl" InitialDelay="500" LocalFiles="[New List (Of String) From { }]" MaxRedirects="3" MaxRetryAfterDelay="30000" Method="GET" Multiplier="2" Parameters="[new System.Collections.Generic.Dictionary(Of System.String, System.String) From { { &quot;q&quot;, cdlSoql } }]" PreferRetryAfterValue="True" ProxySetting="SystemDefault" RequestBodyType="None" RequestUrl="[queryEndpoint]" Result="[cdlResponse]" RetryCount="2" RetryPolicyType="Basic" RetryStatusCodes="[New List (Of System.Net.HttpStatusCode) From { System.Net.HttpStatusCode.RequestTimeout, System.Net.HttpStatusCode.TooManyRequests, System.Net.HttpStatusCode.InternalServerError, System.Net.HttpStatusCode.BadGateway, System.Net.HttpStatusCode.ServiceUnavailable, System.Net.HttpStatusCode.GatewayTimeout }]" SaveRawRequestResponse="False" SaveResponseAsFile="False" TextPayloadContentType="application/json" TextPayloadEncoding="UTF-8" TlsProtocol="Automatic" UseJitter="True" UseOsNegotiatedAuthCredentials="True">
+                  <uwah:NetHttpRequest.TimeoutInMiliseconds>
+                    <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                      <Literal x:TypeArguments="s:Nullable(x:Int32)" Value="30000" />
+                    </InArgument>
+                  </uwah:NetHttpRequest.TimeoutInMiliseconds>
+                </uwah:NetHttpRequest>
+                <ui:InvokeCode ContinueOnError="{x:Null}" Code="string body = (cdlBody == null) ? &quot;&quot; : cdlBody;&#xA;if (string.IsNullOrEmpty(body)) return;&#xA;Newtonsoft.Json.Linq.JToken token;&#xA;try { token = Newtonsoft.Json.Linq.JToken.Parse(body); } catch { return; }&#xA;if (token is Newtonsoft.Json.Linq.JArray) return;&#xA;var obj = (Newtonsoft.Json.Linq.JObject)token;&#xA;var records = obj[&quot;records&quot;] as Newtonsoft.Json.Linq.JArray;&#xA;if (records == null || records.Count == 0) return;&#xA;foreach (var r in records) {&#xA;    string lei = (r[&quot;LinkedEntityId&quot;] == null || r[&quot;LinkedEntityId&quot;].Type == Newtonsoft.Json.Linq.JTokenType.Null) ? &quot;&quot; : r[&quot;LinkedEntityId&quot;].ToString();&#xA;    if (!string.IsNullOrEmpty(lei) &amp;&amp; lei.StartsWith(&quot;500&quot;)) { outCaseId = lei; outMethod = &quot;ContentDocumentLink&quot;; return; }&#xA;}" DisplayName="Parse CDL response" sap2010:WorkflowViewState.IdRef="InvokeCode_ParseCdl" Language="CSharp">
+                  <ui:InvokeCode.Arguments>
+                    <InArgument x:TypeArguments="x:String" x:Key="cdlBody">[If(cdlResponse IsNot Nothing, cdlResponse.TextContent, "")]</InArgument>
+                    <OutArgument x:TypeArguments="x:String" x:Key="outCaseId">[candidateCaseId]</OutArgument>
+                    <OutArgument x:TypeArguments="x:String" x:Key="outMethod">[matchMethodLocal]</OutArgument>
+                  </ui:InvokeCode.Arguments>
+                </ui:InvokeCode>
+              </Sequence>
+            </If.Then>
+          </If>
+        </Sequence>
+      </If.Then>
+    </If>
+    <Assign DisplayName="Assign out_CaseId" sap:VirtualizedContainerService.HintSize="449.6,174.4" sap2010:WorkflowViewState.IdRef="Assign_CaseId">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_CaseId]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[candidateCaseId]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign out_MatchMethod" sap:VirtualizedContainerService.HintSize="449.6,174.4" sap2010:WorkflowViewState.IdRef="Assign_MatchMethod">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_MatchMethod]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[matchMethodLocal]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign out_Found" sap:VirtualizedContainerService.HintSize="449.6,174.4" sap2010:WorkflowViewState.IdRef="Assign_Found">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Boolean">[out_Found]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Boolean">[Not String.IsNullOrEmpty(candidateCaseId)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log END" sap:VirtualizedContainerService.HintSize="449.6,165.6" sap2010:WorkflowViewState.IdRef="LogMessage_End" Level="Info" Message="[&quot;FindCaseByAttachment: Found=&quot; + (Not String.IsNullOrEmpty(candidateCaseId)).ToString() + &quot; CaseId=&quot; + If(candidateCaseId, &quot;&quot;) + &quot; MatchMethod=&quot; + If(matchMethodLocal, &quot;&quot;)]" />
+  </Sequence>
+</Activity>
