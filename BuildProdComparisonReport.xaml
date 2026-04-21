@@ -1,0 +1,190 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="BuildProdComparisonReport" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_ReportPath" Type="InArgument(x:String)" />
+    <x:Property Name="out_ReportPath" Type="OutArgument(x:String)" />
+    <x:Property Name="out_RowsProcessed" Type="OutArgument(x:Int32)" />
+    <x:Property Name="out_RowsFound" Type="OutArgument(x:Int32)" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>Newtonsoft.Json</x:String>
+      <x:String>Newtonsoft.Json.Linq</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="BuildProdComparisonReport" sap:VirtualizedContainerService.HintSize="900,2200" sap2010:WorkflowViewState.IdRef="Sequence_Main">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="reportPath" />
+      <Variable x:TypeArguments="sd:DataTable" Name="dtReport" />
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="rowsProcessed" />
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="rowsFound" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Log START" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="LogMessage_Start" Level="Info" Message="[&quot;BuildProdComparisonReport START&quot;]" />
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="if (!string.IsNullOrWhiteSpace(inPath)) { outPath = inPath.Trim(); }&#xA;else {&#xA;    string docs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);&#xA;    outPath = System.IO.Path.Combine(docs, &quot;TransactionReport_&quot; + DateTime.Now.ToString(&quot;yyyy-MM-dd&quot;) + &quot;.csv&quot;);&#xA;}" DisplayName="Resolve report path" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="InvokeCode_Path" Language="CSharp">
+      <ui:InvokeCode.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="inPath">[in_ReportPath]</InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="outPath">[reportPath]</OutArgument>
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
+    <ui:LogMessage DisplayName="Log report path" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="LogMessage_Path" Level="Info" Message="[&quot;Report path: &quot; + reportPath]" />
+    <If Condition="[Not System.IO.File.Exists(reportPath)]" DisplayName="Validate report exists" sap:VirtualizedContainerService.HintSize="450,200" sap2010:WorkflowViewState.IdRef="If_ReportExists">
+      <If.Then>
+        <Throw DisplayName="Throw if missing" Exception="[New BusinessRuleException(&quot;Transaction report not found: &quot; + reportPath)]" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="Throw_Missing" />
+      </If.Then>
+    </If>
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="Func&lt;string, string[]&gt; parseLine = (string line) =&gt; {&#xA;    var vals = new System.Collections.Generic.List&lt;string&gt;();&#xA;    int pos = 0;&#xA;    while (pos &lt;= line.Length) {&#xA;        if (pos &lt; line.Length &amp;&amp; line[pos] == '&quot;') {&#xA;            pos++;&#xA;            var sb2 = new System.Text.StringBuilder();&#xA;            while (pos &lt; line.Length) {&#xA;                if (line[pos] == '&quot;' &amp;&amp; pos + 1 &lt; line.Length &amp;&amp; line[pos + 1] == '&quot;') { sb2.Append('&quot;'); pos += 2; }&#xA;                else if (line[pos] == '&quot;') { pos++; break; }&#xA;                else { sb2.Append(line[pos]); pos++; }&#xA;            }&#xA;            vals.Add(sb2.ToString());&#xA;        } else {&#xA;            int end = line.IndexOf(',', pos);&#xA;            if (end &lt; 0) end = line.Length;&#xA;            vals.Add(line.Substring(pos, end - pos));&#xA;            pos = end;&#xA;        }&#xA;        if (pos &lt; line.Length &amp;&amp; line[pos] == ',') pos++;&#xA;        else if (pos &gt;= line.Length) break;&#xA;    }&#xA;    return vals.ToArray();&#xA;};&#xA;&#xA;var dt = new System.Data.DataTable();&#xA;string[] lines = System.IO.File.ReadAllLines(inPath);&#xA;if (lines.Length == 0) { outDt = dt; return; }&#xA;string[] headers = parseLine(lines[0]);&#xA;foreach (var h in headers) dt.Columns.Add(h);&#xA;for (int i = 1; i &lt; lines.Length; i++) {&#xA;    string line = lines[i];&#xA;    if (string.IsNullOrWhiteSpace(line)) continue;&#xA;    var vals = parseLine(line);&#xA;    var row = dt.NewRow();&#xA;    for (int c = 0; c &lt; headers.Length &amp;&amp; c &lt; vals.Length; c++) row[c] = vals[c];&#xA;    dt.Rows.Add(row);&#xA;}&#xA;outDt = dt;" DisplayName="Read CSV to DataTable" sap:VirtualizedContainerService.HintSize="450,197" sap2010:WorkflowViewState.IdRef="InvokeCode_Read" Language="CSharp">
+      <ui:InvokeCode.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="inPath">[reportPath]</InArgument>
+        <OutArgument x:TypeArguments="sd:DataTable" x:Key="outDt">[dtReport]</OutArgument>
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
+    <ui:LogMessage DisplayName="Log rows read" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="LogMessage_RowsRead" Level="Info" Message="[&quot;Read &quot; + dtReport.Rows.Count.ToString() + &quot; data rows from report&quot;]" />
+    <ForEach x:TypeArguments="sd:DataRow" DisplayName="ForEach row in report" sap:VirtualizedContainerService.HintSize="450,800" sap2010:WorkflowViewState.IdRef="ForEach_Row" Values="[dtReport.AsEnumerable().ToList()]">
+      <ActivityAction x:TypeArguments="sd:DataRow">
+        <ActivityAction.Argument>
+          <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+        </ActivityAction.Argument>
+        <Sequence DisplayName="Process row" sap:VirtualizedContainerService.HintSize="450,700" sap2010:WorkflowViewState.IdRef="Sequence_Row">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:String" Name="rowSubject" />
+            <Variable x:TypeArguments="x:String" Name="rowAttachment" />
+            <Variable x:TypeArguments="x:String" Name="rowCaseId" />
+            <Variable x:TypeArguments="x:String" Name="rowCaseNumber" />
+            <Variable x:TypeArguments="x:String" Name="rowCaseJson" />
+            <Variable x:TypeArguments="x:String" Name="rowMatchMethod" />
+            <Variable x:TypeArguments="x:Boolean" Default="False" Name="rowFound" />
+          </Sequence.Variables>
+          <ui:InvokeCode ContinueOnError="{x:Null}" Code="string subj = (dr[&quot;Subject&quot;] == null || dr[&quot;Subject&quot;] == System.DBNull.Value) ? &quot;&quot; : dr[&quot;Subject&quot;].ToString();&#xA;string atts = (dr.Table.Columns.Contains(&quot;Attachments&quot;) &amp;&amp; dr[&quot;Attachments&quot;] != null &amp;&amp; dr[&quot;Attachments&quot;] != System.DBNull.Value) ? dr[&quot;Attachments&quot;].ToString() : &quot;&quot;;&#xA;outSubject = subj.Trim();&#xA;string first = &quot;&quot;;&#xA;if (!string.IsNullOrEmpty(atts)) {&#xA;    var parts = atts.Split(new[] { ',', ';', '|' }, System.StringSplitOptions.RemoveEmptyEntries);&#xA;    foreach (var p in parts) {&#xA;        string t = p.Trim().Trim('&quot;').Trim();&#xA;        if (t.ToLower().EndsWith(&quot;.pdf&quot;)) { first = t; break; }&#xA;    }&#xA;    if (string.IsNullOrEmpty(first) &amp;&amp; parts.Length &gt; 0) first = parts[0].Trim().Trim('&quot;').Trim();&#xA;}&#xA;outAttachment = first;" DisplayName="Extract Subject + Attachment" sap:VirtualizedContainerService.HintSize="450,197" sap2010:WorkflowViewState.IdRef="InvokeCode_Extract" Language="CSharp">
+            <ui:InvokeCode.Arguments>
+              <InArgument x:TypeArguments="sd:DataRow" x:Key="dr">[row]</InArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="outSubject">[rowSubject]</OutArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="outAttachment">[rowAttachment]</OutArgument>
+            </ui:InvokeCode.Arguments>
+          </ui:InvokeCode>
+          <ui:LogMessage DisplayName="Log row inputs" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="LogMessage_RowIn" Level="Info" Message="[&quot;Row CaseId=&quot; + If(row(&quot;CaseId&quot;) IsNot Nothing, row(&quot;CaseId&quot;).ToString(), &quot;&quot;) + &quot; Subject='&quot; + rowSubject + &quot;' Attachment='&quot; + rowAttachment + &quot;'&quot;]" />
+          <If Condition="[String.IsNullOrWhiteSpace(rowSubject) AndAlso String.IsNullOrWhiteSpace(rowAttachment)]" DisplayName="Skip if no Subject or Attachment" sap:VirtualizedContainerService.HintSize="450,300" sap2010:WorkflowViewState.IdRef="If_SkipEmpty">
+            <If.Then>
+              <ui:LogMessage DisplayName="Log skip" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="LogMessage_Skip" Level="Warn" Message="[&quot;Skipping row — no Subject or Attachment&quot;]" />
+            </If.Then>
+            <If.Else>
+              <Sequence DisplayName="Find + merge" sap:VirtualizedContainerService.HintSize="450,600" sap2010:WorkflowViewState.IdRef="Sequence_Else">
+                <TryCatch DisplayName="Invoke Main with row inputs" sap:VirtualizedContainerService.HintSize="450,500" sap2010:WorkflowViewState.IdRef="TryCatch_Invoke">
+                <TryCatch.Try>
+                  <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="Invoke Main.xaml" sap:VirtualizedContainerService.HintSize="450,177" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_Main" UnSafe="False" WorkflowFileName="Main.xaml">
+                    <ui:InvokeWorkflowFile.Arguments>
+                      <InArgument x:TypeArguments="x:String" x:Key="in_AttachmentName">[rowAttachment]</InArgument>
+                      <InArgument x:TypeArguments="x:String" x:Key="in_Subject">[rowSubject]</InArgument>
+                      <OutArgument x:TypeArguments="x:String" x:Key="out_CaseId">[rowCaseId]</OutArgument>
+                      <OutArgument x:TypeArguments="x:String" x:Key="out_CaseNumber">[rowCaseNumber]</OutArgument>
+                      <OutArgument x:TypeArguments="x:String" x:Key="out_CaseJson">[rowCaseJson]</OutArgument>
+                      <OutArgument x:TypeArguments="x:Boolean" x:Key="out_Found">[rowFound]</OutArgument>
+                      <OutArgument x:TypeArguments="x:String" x:Key="out_MatchMethod">[rowMatchMethod]</OutArgument>
+                    </ui:InvokeWorkflowFile.Arguments>
+                  </ui:InvokeWorkflowFile>
+                </TryCatch.Try>
+                <TryCatch.Catches>
+                  <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="450,100" sap2010:WorkflowViewState.IdRef="Catch_1">
+                    <ActivityAction x:TypeArguments="s:Exception">
+                      <ActivityAction.Argument>
+                        <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                      </ActivityAction.Argument>
+                      <ui:LogMessage DisplayName="Log invoke error" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="LogMessage_InvokeErr" Level="Warn" Message="[&quot;Main.xaml invoke failed: &quot; + exception.Message]" />
+                    </ActivityAction>
+                  </Catch>
+                </TryCatch.Catches>
+              </TryCatch>
+              <ui:InvokeCode ContinueOnError="{x:Null}" Code="Action&lt;string&gt; ensureCol = (string name) =&gt; { if (!dt.Columns.Contains(name)) dt.Columns.Add(name); };&#xA;Func&lt;string, string&gt; san = (string v) =&gt; v == null ? &quot;&quot; : v.Replace(&quot;\r\n&quot;, &quot; &quot;).Replace(&quot;\n&quot;, &quot; &quot;).Replace(&quot;\r&quot;, &quot; &quot;).Replace(&quot;\t&quot;, &quot; &quot;);&#xA;&#xA;ensureCol(&quot;prod_MatchStatus&quot;);&#xA;ensureCol(&quot;prod_MatchMethod&quot;);&#xA;ensureCol(&quot;prod_CaseId&quot;);&#xA;ensureCol(&quot;prod_CaseNumber&quot;);&#xA;dr[&quot;prod_MatchStatus&quot;] = found ? &quot;Found&quot; : &quot;NotFound&quot;;&#xA;dr[&quot;prod_MatchMethod&quot;] = san(matchMethod);&#xA;dr[&quot;prod_CaseId&quot;] = san(caseId);&#xA;dr[&quot;prod_CaseNumber&quot;] = san(caseNumber);&#xA;&#xA;if (!string.IsNullOrEmpty(caseJson)) {&#xA;    try {&#xA;        var token = Newtonsoft.Json.Linq.JToken.Parse(caseJson);&#xA;        if (token is Newtonsoft.Json.Linq.JObject) {&#xA;            var obj = (Newtonsoft.Json.Linq.JObject)token;&#xA;            foreach (var prop in obj.Properties()) {&#xA;                if (prop.Name == &quot;attributes&quot;) continue;&#xA;                string colName = &quot;prod_&quot; + prop.Name;&#xA;                ensureCol(colName);&#xA;                var val = prop.Value;&#xA;                string sval;&#xA;                if (val == null || val.Type == Newtonsoft.Json.Linq.JTokenType.Null) sval = &quot;&quot;;&#xA;                else if (val.Type == Newtonsoft.Json.Linq.JTokenType.Object || val.Type == Newtonsoft.Json.Linq.JTokenType.Array) sval = val.ToString(Newtonsoft.Json.Formatting.None);&#xA;                else sval = val.ToString();&#xA;                dr[colName] = san(sval);&#xA;            }&#xA;        }&#xA;    } catch (Exception ex) {&#xA;        ensureCol(&quot;prod_ParseError&quot;);&#xA;        dr[&quot;prod_ParseError&quot;] = san(ex.Message);&#xA;    }&#xA;}&#xA;&#xA;procCount = procCount + 1;&#xA;if (found) foundCount = foundCount + 1;" DisplayName="Merge prod fields into row" sap:VirtualizedContainerService.HintSize="450,197" sap2010:WorkflowViewState.IdRef="InvokeCode_Merge" Language="CSharp">
+                <ui:InvokeCode.Arguments>
+                  <InOutArgument x:TypeArguments="sd:DataTable" x:Key="dt">[dtReport]</InOutArgument>
+                  <InArgument x:TypeArguments="sd:DataRow" x:Key="dr">[row]</InArgument>
+                  <InArgument x:TypeArguments="x:String" x:Key="caseJson">[rowCaseJson]</InArgument>
+                  <InArgument x:TypeArguments="x:String" x:Key="caseId">[rowCaseId]</InArgument>
+                  <InArgument x:TypeArguments="x:String" x:Key="caseNumber">[rowCaseNumber]</InArgument>
+                  <InArgument x:TypeArguments="x:String" x:Key="matchMethod">[rowMatchMethod]</InArgument>
+                  <InArgument x:TypeArguments="x:Boolean" x:Key="found">[rowFound]</InArgument>
+                  <InOutArgument x:TypeArguments="x:Int32" x:Key="procCount">[rowsProcessed]</InOutArgument>
+                  <InOutArgument x:TypeArguments="x:Int32" x:Key="foundCount">[rowsFound]</InOutArgument>
+                </ui:InvokeCode.Arguments>
+              </ui:InvokeCode>
+              </Sequence>
+            </If.Else>
+          </If>
+        </Sequence>
+      </ActivityAction>
+    </ForEach>
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="Func&lt;string, string&gt; san = (string v) =&gt; v == null ? &quot;&quot; : v.Replace(&quot;\r\n&quot;, &quot; &quot;).Replace(&quot;\n&quot;, &quot; &quot;).Replace(&quot;\r&quot;, &quot; &quot;).Replace(&quot;\t&quot;, &quot; &quot;);&#xA;var sb = new System.Text.StringBuilder();&#xA;var headerParts = new string[dt.Columns.Count];&#xA;for (int i = 0; i &lt; dt.Columns.Count; i++) headerParts[i] = dt.Columns[i].ColumnName;&#xA;sb.AppendLine(string.Join(&quot;,&quot;, headerParts));&#xA;foreach (System.Data.DataRow r in dt.Rows) {&#xA;    var parts = new string[dt.Columns.Count];&#xA;    for (int i = 0; i &lt; dt.Columns.Count; i++) {&#xA;        string v = (r[i] == null || r[i] == System.DBNull.Value) ? &quot;&quot; : r[i].ToString();&#xA;        v = san(v);&#xA;        parts[i] = &quot;\&quot;&quot; + v.Replace(&quot;\&quot;&quot;, &quot;\&quot;\&quot;&quot;) + &quot;\&quot;&quot;;&#xA;    }&#xA;    sb.AppendLine(string.Join(&quot;,&quot;, parts));&#xA;}&#xA;System.IO.File.WriteAllText(outPath, sb.ToString());" DisplayName="Write DataTable to CSV" sap:VirtualizedContainerService.HintSize="450,197" sap2010:WorkflowViewState.IdRef="InvokeCode_Write" Language="CSharp">
+      <ui:InvokeCode.Arguments>
+        <InArgument x:TypeArguments="sd:DataTable" x:Key="dt">[dtReport]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="outPath">[reportPath]</InArgument>
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
+    <Assign DisplayName="Assign out_ReportPath" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="Assign_OutPath">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_ReportPath]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[reportPath]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign out_RowsProcessed" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="Assign_OutProc">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Int32">[out_RowsProcessed]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Int32">[rowsProcessed]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign out_RowsFound" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="Assign_OutFound">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Int32">[out_RowsFound]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Int32">[rowsFound]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log END" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="LogMessage_End" Level="Info" Message="[&quot;BuildProdComparisonReport END — Path=&quot; + reportPath + &quot; Processed=&quot; + rowsProcessed.ToString() + &quot; Found=&quot; + rowsFound.ToString()]" />
+  </Sequence>
+</Activity>
