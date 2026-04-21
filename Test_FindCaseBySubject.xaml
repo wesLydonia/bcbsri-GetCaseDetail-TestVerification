@@ -1,0 +1,79 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Test_FindCaseBySubject" this:Test_FindCaseBySubject.TestName="FindBySubject_FaxCase" this:Test_FindCaseBySubject.Subject="fax from '(401) 921-0139' for '0014014595668'" this:Test_FindCaseBySubject.AttachmentName="faxreceive.2026-04-20-09-49-33_3D2.pdf" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uta="clr-namespace:UiPath.Testing.Activities;assembly=UiPath.Testing.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="TestName" Type="InArgument(x:String)" />
+    <x:Property Name="Subject" Type="InArgument(x:String)" />
+    <x:Property Name="AttachmentName" Type="InArgument(x:String)" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>UiPath.Testing.Activities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Testing.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Test_FindCaseBySubject" sap:VirtualizedContainerService.HintSize="710,1100" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="outCaseId" />
+      <Variable x:TypeArguments="x:String" Name="outCaseNumber" />
+      <Variable x:TypeArguments="x:String" Name="outCaseJson" />
+      <Variable x:TypeArguments="x:Boolean" Name="outFound" />
+      <Variable x:TypeArguments="x:String" Name="outMatchMethod" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Test START" sap:VirtualizedContainerService.HintSize="450,177" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;=== TEST: FindCaseBySubject [&quot; + TestName + &quot;] START — Subject='&quot; + Subject + &quot;' AttachmentName='&quot; + AttachmentName + &quot;' ===&quot;]" />
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="Invoke Main (subject + attachment)" sap:VirtualizedContainerService.HintSize="450,177" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_Main" UnSafe="False" WorkflowFileName="Main.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="in_AttachmentName">[AttachmentName]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_Subject">[Subject]</InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_CaseId">[outCaseId]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_CaseNumber">[outCaseNumber]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_CaseJson">[outCaseJson]</OutArgument>
+        <OutArgument x:TypeArguments="x:Boolean" x:Key="out_Found">[outFound]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_MatchMethod">[outMatchMethod]</OutArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <uta:VerifyExpression AlternativeVerificationTitle="{x:Null}" KeepScreenshots="{x:Null}" OutputMessageFormat="{x:Null}" Result="{x:Null}" ScreenshotsPath="{x:Null}" ContinueOnFailure="True" DisplayName="Verify: Found = True" Expression="[outFound]" sap:VirtualizedContainerService.HintSize="450,124" sap2010:WorkflowViewState.IdRef="Verify_1" TakeScreenshotInCaseOfFailingAssertion="False" TakeScreenshotInCaseOfSucceedingAssertion="False" />
+    <uta:VerifyExpression AlternativeVerificationTitle="{x:Null}" KeepScreenshots="{x:Null}" OutputMessageFormat="{x:Null}" Result="{x:Null}" ScreenshotsPath="{x:Null}" ContinueOnFailure="True" DisplayName="Verify: out_CaseId starts with 500" Expression="[Not String.IsNullOrEmpty(outCaseId) AndAlso outCaseId.StartsWith(&quot;500&quot;)]" sap:VirtualizedContainerService.HintSize="450,124" sap2010:WorkflowViewState.IdRef="Verify_2" TakeScreenshotInCaseOfFailingAssertion="False" TakeScreenshotInCaseOfSucceedingAssertion="False" />
+    <uta:VerifyExpression AlternativeVerificationTitle="{x:Null}" KeepScreenshots="{x:Null}" OutputMessageFormat="{x:Null}" Result="{x:Null}" ScreenshotsPath="{x:Null}" ContinueOnFailure="True" DisplayName="Verify: out_CaseNumber not empty" Expression="[Not String.IsNullOrEmpty(outCaseNumber)]" sap:VirtualizedContainerService.HintSize="450,124" sap2010:WorkflowViewState.IdRef="Verify_3" TakeScreenshotInCaseOfFailingAssertion="False" TakeScreenshotInCaseOfSucceedingAssertion="False" />
+    <uta:VerifyExpression AlternativeVerificationTitle="{x:Null}" KeepScreenshots="{x:Null}" OutputMessageFormat="{x:Null}" Result="{x:Null}" ScreenshotsPath="{x:Null}" ContinueOnFailure="True" DisplayName="Verify: MatchMethod is Case.Subject" Expression="[outMatchMethod = &quot;Case.Subject&quot;]" sap:VirtualizedContainerService.HintSize="450,124" sap2010:WorkflowViewState.IdRef="Verify_4" TakeScreenshotInCaseOfFailingAssertion="False" TakeScreenshotInCaseOfSucceedingAssertion="False" />
+    <uta:VerifyExpression AlternativeVerificationTitle="{x:Null}" KeepScreenshots="{x:Null}" OutputMessageFormat="{x:Null}" Result="{x:Null}" ScreenshotsPath="{x:Null}" ContinueOnFailure="True" DisplayName="Verify: CaseJson contains CaseNumber" Expression="[Not String.IsNullOrEmpty(outCaseJson) AndAlso outCaseJson.Contains(outCaseNumber)]" sap:VirtualizedContainerService.HintSize="450,124" sap2010:WorkflowViewState.IdRef="Verify_5" TakeScreenshotInCaseOfFailingAssertion="False" TakeScreenshotInCaseOfSucceedingAssertion="False" />
+    <ui:LogMessage DisplayName="Test END" sap:VirtualizedContainerService.HintSize="450,167" sap2010:WorkflowViewState.IdRef="LogMessage_End" Level="Info" Message="[&quot;=== TEST: FindCaseBySubject [&quot; + TestName + &quot;] END — Found=&quot; + outFound.ToString() + &quot; CaseId=&quot; + If(outCaseId, &quot;&quot;) + &quot; CaseNumber=&quot; + If(outCaseNumber, &quot;&quot;) + &quot; MatchMethod=&quot; + If(outMatchMethod, &quot;&quot;) + &quot; ===&quot;]" />
+  </Sequence>
+</Activity>

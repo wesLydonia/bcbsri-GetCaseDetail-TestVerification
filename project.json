@@ -47,6 +47,13 @@
         "testCaseType": "TestCase",
         "executionTemplateType": "Local",
         "fileName": "Test_GetCaseDetail.xaml"
+      },
+      {
+        "editingStatus": "InProgress",
+        "testCaseId": "f3a4b5c6-d7e8-4f90-9123-4567890abcde",
+        "testCaseType": "TestCase",
+        "executionTemplateType": "Local",
+        "fileName": "Test_FindCaseBySubject.xaml"
       }
     ],
     "saveToCloud": false
@@ -60,7 +67,13 @@
         {
           "name": "in_AttachmentName",
           "type": "System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
-          "required": true,
+          "required": false,
+          "hasDefault": false
+        },
+        {
+          "name": "in_Subject",
+          "type": "System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+          "required": false,
           "hasDefault": false
         }
       ],

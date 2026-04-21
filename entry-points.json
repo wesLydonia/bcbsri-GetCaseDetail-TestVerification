@@ -10,8 +10,13 @@
         "properties": {
           "in_AttachmentName": {
             "type": "string",
-            "x-default-expression": "\"faxreceive.2026-04-17-16-24-27_5B8.pdf\"",
-            "default": "faxreceive.2026-04-17-16-24-27_5B8.pdf"
+            "x-default-expression": "\"faxreceive.2026-04-20-09-49-33_3D2.pdf\"",
+            "default": "faxreceive.2026-04-20-09-49-33_3D2.pdf"
+          },
+          "in_Subject": {
+            "type": "string",
+            "x-default-expression": "\"fax from '(401) 921-0139' for '0014014595668'\"",
+            "default": "fax from '(401) 921-0139' for '0014014595668'"
           }
         },
         "required": []

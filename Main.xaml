@@ -1,6 +1,7 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="Main" this:Main.in_AttachmentName="faxreceive.2026-04-17-16-24-27_5B8.pdf" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uwah="clr-namespace:UiPath.Web.Activities.Http;assembly=UiPath.Web.Activities" xmlns:uwahm="clr-namespace:UiPath.Web.Activities.Http.Models;assembly=UiPath.Web.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" this:Main.in_AttachmentName="faxreceive.2026-04-20-09-49-33_3D2.pdf" this:Main.in_Subject="fax from '(401) 921-0139' for '0014014595668'" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uwah="clr-namespace:UiPath.Web.Activities.Http;assembly=UiPath.Web.Activities" xmlns:uwahm="clr-namespace:UiPath.Web.Activities.Http.Models;assembly=UiPath.Web.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="in_AttachmentName" Type="InArgument(x:String)" />
+    <x:Property Name="in_Subject" Type="InArgument(x:String)" />
     <x:Property Name="out_CaseId" Type="OutArgument(x:String)" />
     <x:Property Name="out_CaseNumber" Type="OutArgument(x:String)" />
     <x:Property Name="out_CaseJson" Type="OutArgument(x:String)" />
@@ -82,7 +83,7 @@
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:LogMessage DisplayName="Log START" sap:VirtualizedContainerService.HintSize="452,175" sap2010:WorkflowViewState.IdRef="LogMessage_MainStart" Level="Info" Message="[&quot;GetCaseDetailByAttachment START — AttachmentName=&quot; + If(in_AttachmentName, &quot;(null)&quot;)]" />
+    <ui:LogMessage DisplayName="Log START" sap:VirtualizedContainerService.HintSize="452,175" sap2010:WorkflowViewState.IdRef="LogMessage_MainStart" Level="Info" Message="[&quot;GetCaseDetail START — AttachmentName=&quot; + If(in_AttachmentName, &quot;(null)&quot;) + &quot; Subject=&quot; + If(in_Subject, &quot;(null)&quot;)]" />
     <Assign DisplayName="Init dataApiUrl" sap:VirtualizedContainerService.HintSize="452,175" sap2010:WorkflowViewState.IdRef="Assign_InitDataApiUrl">
       <Assign.To>
         <OutArgument x:TypeArguments="x:String">[dataApiUrl]</OutArgument>
@@ -91,9 +92,9 @@
         <InArgument x:TypeArguments="x:String">["https://bcbsrihub.my.salesforce.com/services/data/v64.0"]</InArgument>
       </Assign.Value>
     </Assign>
-    <If Condition="[String.IsNullOrWhiteSpace(in_AttachmentName)]" DisplayName="Validate input" sap:VirtualizedContainerService.HintSize="452,342" sap2010:WorkflowViewState.IdRef="If_Validate">
+    <If Condition="[String.IsNullOrWhiteSpace(in_AttachmentName) AndAlso String.IsNullOrWhiteSpace(in_Subject)]" DisplayName="Validate input" sap:VirtualizedContainerService.HintSize="452,342" sap2010:WorkflowViewState.IdRef="If_Validate">
       <If.Then>
-        <Throw DisplayName="Throw on empty input" Exception="[New BusinessRuleException(&quot;in_AttachmentName is required.&quot;)]" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="Throw_1" />
+        <Throw DisplayName="Throw on empty input" Exception="[New BusinessRuleException(&quot;At least one of in_AttachmentName or in_Subject is required.&quot;)]" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="Throw_1" />
       </If.Then>
     </If>
     <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="Get SF access token" sap:VirtualizedContainerService.HintSize="452,177" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_Auth" UnSafe="False" WorkflowFileName="GetAccessToken.xaml">
@@ -101,16 +102,34 @@
         <OutArgument x:TypeArguments="x:String" x:Key="out_AccessToken">[accessToken]</OutArgument>
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
-    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="Find case by attachment name" sap:VirtualizedContainerService.HintSize="452,177" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_Find" UnSafe="False" WorkflowFileName="FindCaseByAttachment.xaml">
-      <ui:InvokeWorkflowFile.Arguments>
-        <InArgument x:TypeArguments="x:String" x:Key="in_AccessToken">[accessToken]</InArgument>
-        <InArgument x:TypeArguments="x:String" x:Key="in_DataApiUrl">[dataApiUrl]</InArgument>
-        <InArgument x:TypeArguments="x:String" x:Key="in_AttachmentName">[in_AttachmentName]</InArgument>
-        <OutArgument x:TypeArguments="x:String" x:Key="out_CaseId">[caseId]</OutArgument>
-        <OutArgument x:TypeArguments="x:String" x:Key="out_MatchMethod">[matchMethod]</OutArgument>
-        <OutArgument x:TypeArguments="x:Boolean" x:Key="out_Found">[found]</OutArgument>
-      </ui:InvokeWorkflowFile.Arguments>
-    </ui:InvokeWorkflowFile>
+    <If Condition="[Not String.IsNullOrWhiteSpace(in_Subject)]" DisplayName="If Subject provided, find by Subject" sap:VirtualizedContainerService.HintSize="452,342" sap2010:WorkflowViewState.IdRef="If_SubjectProvided">
+      <If.Then>
+        <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="Find case by subject" sap:VirtualizedContainerService.HintSize="450,177" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_FindSubject" UnSafe="False" WorkflowFileName="FindCaseBySubject.xaml">
+          <ui:InvokeWorkflowFile.Arguments>
+            <InArgument x:TypeArguments="x:String" x:Key="in_AccessToken">[accessToken]</InArgument>
+            <InArgument x:TypeArguments="x:String" x:Key="in_DataApiUrl">[dataApiUrl]</InArgument>
+            <InArgument x:TypeArguments="x:String" x:Key="in_Subject">[in_Subject]</InArgument>
+            <OutArgument x:TypeArguments="x:String" x:Key="out_CaseId">[caseId]</OutArgument>
+            <OutArgument x:TypeArguments="x:String" x:Key="out_MatchMethod">[matchMethod]</OutArgument>
+            <OutArgument x:TypeArguments="x:Boolean" x:Key="out_Found">[found]</OutArgument>
+          </ui:InvokeWorkflowFile.Arguments>
+        </ui:InvokeWorkflowFile>
+      </If.Then>
+    </If>
+    <If Condition="[Not found AndAlso Not String.IsNullOrWhiteSpace(in_AttachmentName)]" DisplayName="If not found and Attachment provided, find by Attachment" sap:VirtualizedContainerService.HintSize="452,342" sap2010:WorkflowViewState.IdRef="If_AttachmentProvided">
+      <If.Then>
+        <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="Find case by attachment name" sap:VirtualizedContainerService.HintSize="450,177" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_Find" UnSafe="False" WorkflowFileName="FindCaseByAttachment.xaml">
+          <ui:InvokeWorkflowFile.Arguments>
+            <InArgument x:TypeArguments="x:String" x:Key="in_AccessToken">[accessToken]</InArgument>
+            <InArgument x:TypeArguments="x:String" x:Key="in_DataApiUrl">[dataApiUrl]</InArgument>
+            <InArgument x:TypeArguments="x:String" x:Key="in_AttachmentName">[in_AttachmentName]</InArgument>
+            <OutArgument x:TypeArguments="x:String" x:Key="out_CaseId">[caseId]</OutArgument>
+            <OutArgument x:TypeArguments="x:String" x:Key="out_MatchMethod">[matchMethod]</OutArgument>
+            <OutArgument x:TypeArguments="x:Boolean" x:Key="out_Found">[found]</OutArgument>
+          </ui:InvokeWorkflowFile.Arguments>
+        </ui:InvokeWorkflowFile>
+      </If.Then>
+    </If>
     <If Condition="[found]" DisplayName="If case found, fetch full detail" sap:VirtualizedContainerService.HintSize="452,1004" sap2010:WorkflowViewState.IdRef="If_Found">
       <If.Then>
         <Sequence DisplayName="Fetch Case detail" sap:VirtualizedContainerService.HintSize="450,700" sap2010:WorkflowViewState.IdRef="Sequence_Fetch">
@@ -137,7 +156,7 @@
         </Sequence>
       </If.Then>
       <If.Else>
-        <ui:LogMessage DisplayName="Log not found" sap:VirtualizedContainerService.HintSize="450,143" sap2010:WorkflowViewState.IdRef="LogMessage_NotFound" Level="Warn" Message="[&quot;No case found for attachment '&quot; + in_AttachmentName + &quot;'. MatchMethod=&quot; + matchMethod]" />
+        <ui:LogMessage DisplayName="Log not found" sap:VirtualizedContainerService.HintSize="450,143" sap2010:WorkflowViewState.IdRef="LogMessage_NotFound" Level="Warn" Message="[&quot;No case found. AttachmentName='&quot; + If(in_AttachmentName, &quot;&quot;) + &quot;' Subject='&quot; + If(in_Subject, &quot;&quot;) + &quot;' MatchMethod=&quot; + If(matchMethod, &quot;&quot;)]" />
       </If.Else>
     </If>
     <Assign DisplayName="Assign out_CaseId" sap:VirtualizedContainerService.HintSize="452,175" sap2010:WorkflowViewState.IdRef="Assign_OutCaseId">
