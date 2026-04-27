@@ -2,6 +2,39 @@
   "$schema": "https://cloud.uipath.com/draft/2024-12/entry-point",
   "entryPoints": [
     {
+      "filePath": "BuildProdComparisonReport.xaml",
+      "uniqueId": "a4b5c6d7-e8f9-4012-9345-67890abcdef1",
+      "type": "process",
+      "input": {
+        "type": "object",
+        "properties": {
+          "in_ReportPath": {
+            "type": "string",
+            "description": "Optional override. Defaults to %USERPROFILE%\\Documents\\TransactionReport_{yyyy-MM-dd}.csv for today."
+          }
+        },
+        "required": []
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "out_ReportPath": {
+            "type": "string"
+          },
+          "out_RowsProcessed": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "out_RowsFound": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          }
+        }
+      }
+    },
+    {
       "filePath": "Main.xaml",
       "uniqueId": "e2f3a4b5-c6d7-4e8f-9012-34567890abcd",
       "type": "process",
@@ -17,6 +50,11 @@
             "type": "string",
             "x-default-expression": "\"fax from '(401) 921-0139' for '0014014595668'\"",
             "default": "fax from '(401) 921-0139' for '0014014595668'"
+          },
+          "in_AccountId": {
+            "type": "string",
+            "x-default-expression": "\"\"",
+            "default": ""
           }
         },
         "required": []
@@ -38,34 +76,6 @@
           },
           "out_MatchMethod": {
             "type": "string"
-          }
-        }
-      }
-    },
-    {
-      "filePath": "BuildProdComparisonReport.xaml",
-      "uniqueId": "a4b5c6d7-e8f9-4012-9345-67890abcdef1",
-      "type": "process",
-      "input": {
-        "type": "object",
-        "properties": {
-          "in_ReportPath": {
-            "type": "string"
-          }
-        },
-        "required": []
-      },
-      "output": {
-        "type": "object",
-        "properties": {
-          "out_ReportPath": {
-            "type": "string"
-          },
-          "out_RowsProcessed": {
-            "type": "integer"
-          },
-          "out_RowsFound": {
-            "type": "integer"
           }
         }
       }

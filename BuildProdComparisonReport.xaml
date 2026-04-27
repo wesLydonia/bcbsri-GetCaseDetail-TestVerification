@@ -91,23 +91,25 @@
           <Sequence.Variables>
             <Variable x:TypeArguments="x:String" Name="rowSubject" />
             <Variable x:TypeArguments="x:String" Name="rowAttachment" />
+            <Variable x:TypeArguments="x:String" Name="rowAccountId" />
             <Variable x:TypeArguments="x:String" Name="rowCaseId" />
             <Variable x:TypeArguments="x:String" Name="rowCaseNumber" />
             <Variable x:TypeArguments="x:String" Name="rowCaseJson" />
             <Variable x:TypeArguments="x:String" Name="rowMatchMethod" />
             <Variable x:TypeArguments="x:Boolean" Default="False" Name="rowFound" />
           </Sequence.Variables>
-          <ui:InvokeCode ContinueOnError="{x:Null}" Code="string subj = (dr[&quot;Subject&quot;] == null || dr[&quot;Subject&quot;] == System.DBNull.Value) ? &quot;&quot; : dr[&quot;Subject&quot;].ToString();&#xA;string atts = (dr.Table.Columns.Contains(&quot;Attachments&quot;) &amp;&amp; dr[&quot;Attachments&quot;] != null &amp;&amp; dr[&quot;Attachments&quot;] != System.DBNull.Value) ? dr[&quot;Attachments&quot;].ToString() : &quot;&quot;;&#xA;outSubject = subj.Trim();&#xA;string first = &quot;&quot;;&#xA;if (!string.IsNullOrEmpty(atts)) {&#xA;    var parts = atts.Split(new[] { ',', ';', '|' }, System.StringSplitOptions.RemoveEmptyEntries);&#xA;    foreach (var p in parts) {&#xA;        string t = p.Trim().Trim('&quot;').Trim();&#xA;        if (t.ToLower().EndsWith(&quot;.pdf&quot;)) { first = t; break; }&#xA;    }&#xA;    if (string.IsNullOrEmpty(first) &amp;&amp; parts.Length &gt; 0) first = parts[0].Trim().Trim('&quot;').Trim();&#xA;}&#xA;outAttachment = first;" DisplayName="Extract Subject + Attachment" sap:VirtualizedContainerService.HintSize="450,197" sap2010:WorkflowViewState.IdRef="InvokeCode_Extract" Language="CSharp">
+          <ui:InvokeCode ContinueOnError="{x:Null}" Code="string subj = (dr[&quot;Subject&quot;] == null || dr[&quot;Subject&quot;] == System.DBNull.Value) ? &quot;&quot; : dr[&quot;Subject&quot;].ToString();&#xA;string atts = (dr.Table.Columns.Contains(&quot;Attachments&quot;) &amp;&amp; dr[&quot;Attachments&quot;] != null &amp;&amp; dr[&quot;Attachments&quot;] != System.DBNull.Value) ? dr[&quot;Attachments&quot;].ToString() : &quot;&quot;;&#xA;string acct = (dr.Table.Columns.Contains(&quot;AccountId&quot;) &amp;&amp; dr[&quot;AccountId&quot;] != null &amp;&amp; dr[&quot;AccountId&quot;] != System.DBNull.Value) ? dr[&quot;AccountId&quot;].ToString() : &quot;&quot;;&#xA;outSubject = subj.Trim();&#xA;outAccountId = acct.Trim();&#xA;string first = &quot;&quot;;&#xA;if (!string.IsNullOrEmpty(atts)) {&#xA;    var parts = atts.Split(new[] { ',', ';', '|' }, System.StringSplitOptions.RemoveEmptyEntries);&#xA;    foreach (var p in parts) {&#xA;        string t = p.Trim().Trim('&quot;').Trim();&#xA;        if (t.ToLower().EndsWith(&quot;.pdf&quot;)) { first = t; break; }&#xA;    }&#xA;    if (string.IsNullOrEmpty(first) &amp;&amp; parts.Length &gt; 0) first = parts[0].Trim().Trim('&quot;').Trim();&#xA;}&#xA;outAttachment = first;" DisplayName="Extract Subject + Attachment + AccountId" sap:VirtualizedContainerService.HintSize="450,197" sap2010:WorkflowViewState.IdRef="InvokeCode_Extract" Language="CSharp">
             <ui:InvokeCode.Arguments>
               <InArgument x:TypeArguments="sd:DataRow" x:Key="dr">[row]</InArgument>
               <OutArgument x:TypeArguments="x:String" x:Key="outSubject">[rowSubject]</OutArgument>
               <OutArgument x:TypeArguments="x:String" x:Key="outAttachment">[rowAttachment]</OutArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="outAccountId">[rowAccountId]</OutArgument>
             </ui:InvokeCode.Arguments>
           </ui:InvokeCode>
-          <ui:LogMessage DisplayName="Log row inputs" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="LogMessage_RowIn" Level="Info" Message="[&quot;Row CaseId=&quot; + If(row(&quot;CaseId&quot;) IsNot Nothing, row(&quot;CaseId&quot;).ToString(), &quot;&quot;) + &quot; Subject='&quot; + rowSubject + &quot;' Attachment='&quot; + rowAttachment + &quot;'&quot;]" />
-          <If Condition="[String.IsNullOrWhiteSpace(rowSubject) AndAlso String.IsNullOrWhiteSpace(rowAttachment)]" DisplayName="Skip if no Subject or Attachment" sap:VirtualizedContainerService.HintSize="450,300" sap2010:WorkflowViewState.IdRef="If_SkipEmpty">
+          <ui:LogMessage DisplayName="Log row inputs" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="LogMessage_RowIn" Level="Info" Message="[&quot;Row CaseId=&quot; + If(row(&quot;CaseId&quot;) IsNot Nothing, row(&quot;CaseId&quot;).ToString(), &quot;&quot;) + &quot; AccountId='&quot; + rowAccountId + &quot;' Subject='&quot; + rowSubject + &quot;' Attachment='&quot; + rowAttachment + &quot;'&quot;]" />
+          <If Condition="[String.IsNullOrWhiteSpace(rowAccountId) AndAlso String.IsNullOrWhiteSpace(rowSubject) AndAlso String.IsNullOrWhiteSpace(rowAttachment)]" DisplayName="Skip if no AccountId, Subject or Attachment" sap:VirtualizedContainerService.HintSize="450,300" sap2010:WorkflowViewState.IdRef="If_SkipEmpty">
             <If.Then>
-              <ui:LogMessage DisplayName="Log skip" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="LogMessage_Skip" Level="Warn" Message="[&quot;Skipping row — no Subject or Attachment&quot;]" />
+              <ui:LogMessage DisplayName="Log skip" sap:VirtualizedContainerService.HintSize="450,91" sap2010:WorkflowViewState.IdRef="LogMessage_Skip" Level="Warn" Message="[&quot;Skipping row — no AccountId, Subject or Attachment&quot;]" />
             </If.Then>
             <If.Else>
               <Sequence DisplayName="Find + merge" sap:VirtualizedContainerService.HintSize="450,600" sap2010:WorkflowViewState.IdRef="Sequence_Else">
@@ -115,6 +117,7 @@
                 <TryCatch.Try>
                   <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="Invoke Main.xaml" sap:VirtualizedContainerService.HintSize="450,177" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_Main" UnSafe="False" WorkflowFileName="Main.xaml">
                     <ui:InvokeWorkflowFile.Arguments>
+                      <InArgument x:TypeArguments="x:String" x:Key="in_AccountId">[rowAccountId]</InArgument>
                       <InArgument x:TypeArguments="x:String" x:Key="in_AttachmentName">[rowAttachment]</InArgument>
                       <InArgument x:TypeArguments="x:String" x:Key="in_Subject">[rowSubject]</InArgument>
                       <OutArgument x:TypeArguments="x:String" x:Key="out_CaseId">[rowCaseId]</OutArgument>
